@@ -122,7 +122,7 @@ footer strong{color:rgba(255,255,255,0.85)}
 <div class="hero">
   <p class="hero-eyebrow">Health-first · Meal prep · Custom</p>
   <h1>Built for <em>your</em> goals</h1>
-  <p class="hero-sub">Every recipe tailored to your health markers, nutritionist guidance, and preferences.</p>
+  <p class="hero-sub">Every recipe tailored to your health goals, nutritionist guidance, and preferences.</p>
 </div>
 
 <div id="page-recipes" class="page active" style="max-width:none;padding:0">
@@ -144,7 +144,7 @@ footer strong{color:rgba(255,255,255,0.85)}
   <div id="shopping-content"></div>
 </div>
 
-<footer><strong>RD's Recipe Book</strong> — tailored to your Labcorp report · May 2026</footer>
+<footer><strong>RD's Recipe Book</strong> — health-first recipes built for Ratnadeep</footer>
 
 <script>
 var RECIPES = {
@@ -158,8 +158,8 @@ var RECIPES = {
       nutrition: {calories:320,protein:28,carbs:35,fiber:6,addedSugar:0,sodium:180},
       ingredients: [
         {qty:0.5,unit:"cup",name:"Rolled oats (old fashioned)",mod:""},
-        {qty:1,unit:"tbsp",name:"Dymatize ISO100 Cappuccino",mod:"you have this"},
-        {qty:0.5,unit:"cup",name:"2% milk",mod:"you have this"},
+        {qty:1,unit:"tbsp",name:"Dymatize ISO100 Cappuccino",mod:""},
+        {qty:0.5,unit:"cup",name:"2% milk",mod:""},
         {qty:0.25,unit:"cup",name:"Plain low-fat Greek yogurt",mod:""},
         {qty:0.5,unit:"tbsp",name:"Chia seeds",mod:""},
         {qty:0.25,unit:"tsp",name:"Ground cinnamon",mod:""},
@@ -172,12 +172,12 @@ var RECIPES = {
         "Each morning, top with <strong>1/4 cup fresh or frozen berries</strong> and eat cold straight from the jar. No heating needed.",
         "Keeps in the fridge for <strong>up to 5 days</strong>. Prep all 12 jars Sunday to cover the full week for you and your fiancee."
       ],
-      healthNotes: ["0g added sugar","High protein stabilizes blood sugar","Fiber slows glucose absorption","Berries are lowest-glycemic fruit","Cinnamon supports blood sugar regulation","Solves breakfast-skipping habit"],
-      watchNotes: ["95mg caffeine per jar — flag for fiancee if sensitive"],
+      healthNotes: ["0g added sugar","High protein stabilizes blood sugar","Fiber slows glucose absorption","Berries are lowest-glycemic fruit","Cinnamon supports blood sugar regulation","Great for skipping breakfast habit"],
+      watchNotes: ["95mg caffeine per jar — check sensitivity before sharing"],
       grocery: [
         {name:"Rolled oats (old fashioned)",qty:"1 large canister",have:false},
-        {name:"Dymatize ISO100 Cappuccino",qty:"you have this",have:true},
-        {name:"2% milk",qty:"you have this",have:true},
+        {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",have:false},
+        {name:"2% milk",qty:"1 gallon",have:false},
         {name:"Plain low-fat Greek yogurt",qty:"32oz tub",have:false},
         {name:"Chia seeds",qty:"bulk bag",have:false},
         {name:"Ground cinnamon",qty:"small jar",have:false},
@@ -205,7 +205,7 @@ var RECIPES = {
         {qty:1.5,unit:"tbsp",name:"Peanut butter",mod:""},
         {qty:0.25,unit:"",name:"Lime, juiced",mod:""},
         {qty:0.5,unit:"tbsp",name:"Low-sodium soy sauce",mod:"swap"},
-        {qty:0.25,unit:"tbsp",name:"Sriracha",mod:"you have this"},
+        {qty:0.25,unit:"tbsp",name:"Sriracha",mod:""},
         {qty:0.25,unit:"tbsp",name:"Chili crunch oil",mod:""},
         {qty:0.25,unit:"tsp",name:"Maple syrup",mod:""},
         {qty:0.75,unit:"tbsp",name:"Water to thin dressing",mod:""}
@@ -217,7 +217,7 @@ var RECIPES = {
         "In a large bowl, combine cooled pasta, cauliflower, edamame, carrots, green onion, cilantro, and peanuts. Pour dressing over and toss well.",
         "Divide into <strong>4 airtight containers</strong>. Keeps in the fridge up to <strong>4 days</strong>. Toss before eating as dressing settles."
       ],
-      healthNotes: ["Brami pasta: 21g protein + 9g fiber vs regular rotini","Cauliflower: nutritionist-approved lunch vegetable","Low-sodium soy sauce cuts ~335mg sodium per serving","High fiber blunts blood sugar spike from carbs"],
+      healthNotes: ["Brami pasta: 21g protein + 9g fiber vs regular rotini","Cauliflower: nutritionist-approved lunch vegetable","Low-sodium soy sauce reduces sodium per serving","High fiber helps manage blood sugar from carbs"],
       watchNotes: [],
       grocery: [
         {name:"Brami Fusilli protein pasta",qty:"1 box",have:false},
@@ -232,7 +232,7 @@ var RECIPES = {
         {name:"Low-sodium soy sauce",qty:"1 bottle",have:false},
         {name:"Chili crunch oil",qty:"1 jar",have:false},
         {name:"Maple syrup",qty:"small bottle",have:false},
-        {name:"Sriracha",qty:"you have this",have:true}
+        {name:"Sriracha",qty:"1 bottle",have:false}
       ]
     }
   ]
@@ -362,7 +362,7 @@ function renderRecipe(cat) {
     + '<div class="ingredients-col"><div class="col-label">Ingredients for ' + servings + ' servings</div><ul class="ingredient-list">' + ings + '</ul></div>'
     + '<div class="steps-col"><div class="col-label">Instructions</div>' + steps + '</div>'
     + '</div>'
-    + '<div class="health-notes"><div class="col-label" style="margin-bottom:0.5rem">Why this works for your markers</div>'
+    + '<div class="health-notes"><div class="col-label" style="margin-bottom:0.5rem">Why this works for your goals</div>'
     + '<div class="health-note-list">' + hnotes + wnotes + '</div></div>'
     + '</div>';
 
