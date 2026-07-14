@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RD's Recipe Book</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#2D5A3D;--green-light:#EAF2EC;--green-mid:#4A7C5F;
+  --amber:#B87333;--amber-light:#FDF4EB;
+  --ink:#1A1A1A;--muted:#6B6B6B;--border:#D8E0DA;
+  --bg:#F8FAF8;--white:#FFFFFF;
+  --red:#C0392B;--red-light:#FDECEC;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;min-height:100vh}
+nav{background:var(--green);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200}
+.brand{font-family:'DM Serif Display',serif;color:#fff;font-size:1rem}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links button{background:none;border:none;color:rgba(255,255,255,0.65);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;padding:0.4rem 1rem;cursor:pointer;border-radius:6px;transition:all 0.15s}
+.nav-links button:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.nav-links button.active{color:#fff;background:rgba(255,255,255,0.18)}
+.hero{background:var(--green);padding:2.5rem 1.5rem 2rem;text-align:center;border-bottom:3px solid var(--amber)}
+.hero-eyebrow{font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:0.5rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.5rem);color:#fff;line-height:1.2;margin-bottom:0.5rem}
+.hero h1 em{font-style:italic;color:#A8D5B5}
+.hero-sub{color:rgba(255,255,255,0.65);font-size:0.85rem;max-width:420px;margin:0 auto}
+.page{display:none;max-width:860px;margin:0 auto;padding:2rem 1.5rem}
+.page.active{display:block}
+.page-tabs{background:var(--white);border-bottom:1px solid var(--border);display:flex;padding:0 1.5rem;max-width:none}
+.page-tab{background:none;border:none;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;color:var(--muted);padding:0.85rem 1.25rem 0.75rem;cursor:pointer;transition:all 0.15s;margin-bottom:-1px}
+.page-tab:hover{color:var(--ink)}
+.page-tab.active{color:var(--green);border-bottom-color:var(--green)}
+.cat-wrap{max-width:860px;margin:0 auto;padding:2rem 1.5rem}
+.recipe-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem}
+.cat-tabs{display:flex;gap:0.5rem;flex-wrap:wrap}
+.cat-tab{background:var(--white);border:1px solid var(--border);border-radius:999px;font-size:0.8rem;font-weight:500;color:var(--muted);padding:0.35rem 1rem;cursor:pointer;transition:all 0.15s}
+.cat-tab:hover{border-color:var(--green);color:var(--green)}
+.cat-tab.active{background:var(--green);border-color:var(--green);color:#fff}
+.nav-right{display:flex;align-items:center;gap:0.75rem}
+.recipe-counter{font-size:0.8rem;color:var(--muted)}
+.recipe-nav-arrows{display:flex;gap:0.5rem}
+.arrow-btn{background:var(--white);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--muted);transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.arrow-btn:hover:not([disabled]){border-color:var(--green);color:var(--green)}
+.arrow-btn[disabled]{opacity:0.35;cursor:default}
+.recipe-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.recipe-header{background:var(--green-light);padding:1.5rem 1.75rem;border-bottom:1px solid var(--border)}
+.recipe-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.recipe-title{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400;color:var(--green)}
+.recipe-desc{font-size:0.85rem;color:var(--green-mid);margin-top:0.2rem;max-width:380px}
+.recipe-badges{display:flex;gap:0.4rem;flex-wrap:wrap}
+.badge{background:var(--white);border:1px solid var(--border);border-radius:999px;font-size:0.72rem;font-weight:500;color:var(--green);padding:0.18rem 0.6rem;white-space:nowrap}
+.serving-control{display:flex;align-items:center;gap:0.75rem;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:0.6rem 1rem;width:fit-content}
+.serving-label{font-size:0.78rem;color:var(--muted);font-weight:500}
+.serving-btns{display:flex;align-items:center;gap:0.5rem}
+.s-btn{background:none;border:1px solid var(--border);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--ink);line-height:1;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.s-btn:hover{border-color:var(--green);color:var(--green)}
+.serving-num{font-size:1rem;font-weight:500;color:var(--ink);min-width:28px;text-align:center}
+.nutrition-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));border-bottom:1px solid var(--border)}
+.nutrition-cell{padding:0.85rem 1rem;text-align:center;border-right:1px solid var(--border)}
+.nutrition-cell:last-child{border-right:none}
+.nutrition-cell .val{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--ink);display:block}
+.nutrition-cell .lbl{font-size:0.65rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:0.1rem}
+.recipe-body{display:grid;grid-template-columns:1fr 1.35fr}
+@media(max-width:600px){.recipe-body{grid-template-columns:1fr}}
+.ingredients-col{padding:1.25rem 1.5rem;border-right:1px solid var(--border)}
+.steps-col{padding:1.25rem 1.5rem}
+.col-label{font-size:0.65rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.9rem}
+.ingredient-list{list-style:none}
+.ingredient-list li{display:flex;gap:0.5rem;padding:0.38rem 0;border-bottom:1px solid var(--green-light);font-size:0.88rem;align-items:baseline}
+.ingredient-list li:last-child{border-bottom:none}
+.qty{font-weight:500;color:var(--green);min-width:56px;font-size:0.8rem}
+.iname{color:var(--ink);flex:1}
+.mod{font-size:0.7rem;color:var(--amber);font-weight:500;margin-left:auto;white-space:nowrap;padding-left:0.3rem}
+.step{display:flex;gap:0.9rem;margin-bottom:1rem;align-items:flex-start}
+.step-num{background:var(--green);color:#fff;font-size:0.65rem;font-weight:500;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:4px}
+.step-text{font-size:0.88rem;color:var(--ink);line-height:1.6}
+.step-text strong{font-weight:500;color:var(--green)}
+.health-notes{background:var(--green-light);border-top:1px solid var(--border);padding:1rem 1.5rem}
+.health-note-list{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.6rem}
+.hnote{background:var(--white);border:1px solid var(--border);border-radius:7px;font-size:0.75rem;color:var(--green);padding:0.25rem 0.6rem;display:flex;align-items:center;gap:0.3rem}
+.hnote::before{content:"✓";font-weight:700}
+.wnote{background:var(--red-light);border:1px solid #F5C6C6;border-radius:7px;font-size:0.75rem;color:var(--red);padding:0.25rem 0.6rem;display:flex;align-items:center;gap:0.3rem}
+.wnote::before{content:"⚠"}
+.shop-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.shop-header h2{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400}
+.clear-btn{background:none;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--muted);padding:0.4rem 0.85rem;cursor:pointer;transition:all 0.15s}
+.clear-btn:hover{border-color:var(--red);color:var(--red)}
+.shop-section{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.25rem}
+.shop-section-header{background:var(--green-light);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.shop-section-title{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--green)}
+.shop-section-count{font-size:0.72rem;color:var(--green-mid)}
+.shop-item{display:flex;align-items:center;gap:0.85rem;padding:0.7rem 1.25rem;border-bottom:1px solid var(--green-light);cursor:pointer;transition:background 0.1s;user-select:none}
+.shop-item:last-child{border-bottom:none}
+.shop-item:hover{background:var(--bg)}
+.shop-item.checked .shop-item-name{text-decoration:line-through;color:var(--muted)}
+.shop-checkbox{width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.shop-item.checked .shop-checkbox{background:var(--green);border-color:var(--green)}
+.checkmark{display:none;font-size:11px;color:#fff;font-weight:700}
+.shop-item.checked .checkmark{display:block}
+.shop-item-name{flex:1;font-size:0.9rem;color:var(--ink)}
+.shop-item-qty{font-size:0.78rem;color:var(--muted);white-space:nowrap}
+.have-tag{font-size:0.7rem;color:var(--green-mid);font-weight:500;margin-left:0.4rem}
+.progress-bar{height:3px;background:var(--border);border-radius:999px;margin-bottom:1.5rem;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:999px;transition:width 0.3s}
+.progress-label{font-size:0.78rem;color:var(--muted);margin-bottom:0.5rem}
+footer{background:var(--green);color:rgba(255,255,255,0.55);text-align:center;padding:1.5rem;font-size:0.75rem;margin-top:3rem}
+footer strong{color:rgba(255,255,255,0.85)}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">RD's Recipe Book</span>
+  <ul class="nav-links">
+    <li><button class="active" onclick="showPage('recipes',this)">Recipes</button></li>
+    <li><button onclick="showPage('shopping',this)">Shopping list</button></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <p class="hero-eyebrow">Health-first · Meal prep · Custom</p>
+  <h1>Built for <em>your</em> goals</h1>
+  <p class="hero-sub">Every recipe tailored to your health markers, nutritionist guidance, and preferences.</p>
+</div>
+
+<div id="page-recipes" class="page active" style="max-width:none;padding:0">
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="showCat('breakfast',this)">Breakfast</button>
+    <button class="page-tab" onclick="showCat('meals',this)">Meals</button>
+  </div>
+  <div id="cat-breakfast" class="cat-wrap"></div>
+  <div id="cat-meals" class="cat-wrap" style="display:none"></div>
+</div>
+
+<div id="page-shopping" class="page">
+  <div class="shop-header">
+    <h2>Shopping list</h2>
+    <button class="clear-btn" onclick="clearChecked()">Clear checked</button>
+  </div>
+  <p class="progress-label" id="progress-label"></p>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div id="shopping-content"></div>
+</div>
+
+<footer><strong>RD's Recipe Book</strong> — tailored to your Labcorp report · May 2026</footer>
+
+<script>
+var RECIPES = {
+  breakfast: [
+    {
+      id: "oats",
+      name: "Coffee Protein Overnight Oats",
+      desc: "Cappuccino-flavored protein oats in mason jars. Zero added sugar, 28g protein per jar.",
+      badges: ["5 min prep","No cooking","12 servings","95mg caffeine"],
+      baseServings: 12,
+      nutrition: {calories:320,protein:28,carbs:35,fiber:6,addedSugar:0,sodium:180},
+      ingredients: [
+        {qty:0.5,unit:"cup",name:"Rolled oats (old fashioned)",mod:""},
+        {qty:1,unit:"tbsp",name:"Dymatize ISO100 Cappuccino",mod:"you have this"},
+        {qty:0.5,unit:"cup",name:"2% milk",mod:"you have this"},
+        {qty:0.25,unit:"cup",name:"Plain low-fat Greek yogurt",mod:""},
+        {qty:0.5,unit:"tbsp",name:"Chia seeds",mod:""},
+        {qty:0.25,unit:"tsp",name:"Ground cinnamon",mod:""},
+        {qty:0.25,unit:"cup",name:"Blueberries or raspberries",mod:"add morning of"}
+      ],
+      steps: [
+        "In each wide-mouth 16oz mason jar, add <strong>1/2 cup oats</strong>, <strong>1 tbsp protein powder</strong>, <strong>1/2 tbsp chia seeds</strong>, and <strong>1/4 tsp cinnamon</strong>. Stir together.",
+        "Pour in <strong>1/2 cup 2% milk</strong> and <strong>1/4 cup Greek yogurt</strong>. Stir well until no dry clumps remain and protein powder is fully dissolved.",
+        "Seal jars and refrigerate for at least <strong>6 hours or overnight</strong>. Oats absorb the liquid and thicken significantly.",
+        "Each morning, top with <strong>1/4 cup fresh or frozen berries</strong> and eat cold straight from the jar. No heating needed.",
+        "Keeps in the fridge for <strong>up to 5 days</strong>. Prep all 12 jars Sunday to cover the full week for you and your fiancee."
+      ],
+      healthNotes: ["0g added sugar","High protein stabilizes blood sugar","Fiber slows glucose absorption","Berries are lowest-glycemic fruit","Cinnamon supports blood sugar regulation","Solves breakfast-skipping habit"],
+      watchNotes: ["95mg caffeine per jar — flag for fiancee if sensitive"],
+      grocery: [
+        {name:"Rolled oats (old fashioned)",qty:"1 large canister",have:false},
+        {name:"Dymatize ISO100 Cappuccino",qty:"you have this",have:true},
+        {name:"2% milk",qty:"you have this",have:true},
+        {name:"Plain low-fat Greek yogurt",qty:"32oz tub",have:false},
+        {name:"Chia seeds",qty:"bulk bag",have:false},
+        {name:"Ground cinnamon",qty:"small jar",have:false},
+        {name:"Frozen berries (blueberries or raspberries)",qty:"2 x 12oz bags",have:false},
+        {name:"Wide-mouth 16oz mason jars",qty:"pack of 12",have:false}
+      ]
+    }
+  ],
+  meals: [
+    {
+      id: "pasta",
+      name: "Peanut Pasta Salad",
+      desc: "Thai-inspired meal prep salad with Brami protein pasta, cauliflower, edamame, and creamy peanut dressing.",
+      badges: ["20 min total","4 servings","4 days fridge","Lunch"],
+      baseServings: 4,
+      nutrition: {calories:480,protein:33,carbs:52,fiber:14,addedSugar:1,sodium:600},
+      ingredients: [
+        {qty:1,unit:"cup",name:"Brami Fusilli pasta, cooked",mod:"swap"},
+        {qty:0.5,unit:"cup",name:"Cauliflower, small florets",mod:"swap"},
+        {qty:0.25,unit:"cup",name:"Frozen edamame, thawed",mod:""},
+        {qty:0.25,unit:"cup",name:"Carrots, grated",mod:""},
+        {qty:0.25,unit:"cup",name:"Green onion, chopped",mod:""},
+        {qty:2,unit:"tbsp",name:"Cilantro, chopped",mod:""},
+        {qty:1.5,unit:"tbsp",name:"Peanuts, crushed",mod:""},
+        {qty:1.5,unit:"tbsp",name:"Peanut butter",mod:""},
+        {qty:0.25,unit:"",name:"Lime, juiced",mod:""},
+        {qty:0.5,unit:"tbsp",name:"Low-sodium soy sauce",mod:"swap"},
+        {qty:0.25,unit:"tbsp",name:"Sriracha",mod:"you have this"},
+        {qty:0.25,unit:"tbsp",name:"Chili crunch oil",mod:""},
+        {qty:0.25,unit:"tsp",name:"Maple syrup",mod:""},
+        {qty:0.75,unit:"tbsp",name:"Water to thin dressing",mod:""}
+      ],
+      steps: [
+        "Cook <strong>Brami Fusilli</strong> per package instructions. Drain and cool completely — warm pasta makes the dressing watery.",
+        "Chop <strong>cauliflower</strong> into small florets. Grate <strong>carrots</strong>. Chop <strong>green onion</strong> and <strong>cilantro</strong>. Thaw <strong>edamame</strong> or mix with warm pasta to speed it up.",
+        "In a jar, whisk <strong>peanut butter, lime juice, low-sodium soy sauce, sriracha, maple syrup,</strong> and <strong>water</strong> until smooth and pourable. Spoon chili crunch oil over the surface — do not stir it in.",
+        "In a large bowl, combine cooled pasta, cauliflower, edamame, carrots, green onion, cilantro, and peanuts. Pour dressing over and toss well.",
+        "Divide into <strong>4 airtight containers</strong>. Keeps in the fridge up to <strong>4 days</strong>. Toss before eating as dressing settles."
+      ],
+      healthNotes: ["Brami pasta: 21g protein + 9g fiber vs regular rotini","Cauliflower: nutritionist-approved lunch vegetable","Low-sodium soy sauce cuts ~335mg sodium per serving","High fiber blunts blood sugar spike from carbs"],
+      watchNotes: [],
+      grocery: [
+        {name:"Brami Fusilli protein pasta",qty:"1 box",have:false},
+        {name:"Frozen edamame (shelled)",qty:"1 bag",have:false},
+        {name:"Cauliflower",qty:"1 head",have:false},
+        {name:"Carrots",qty:"2-3 medium",have:false},
+        {name:"Green onion",qty:"1 bunch",have:false},
+        {name:"Cilantro",qty:"1 bunch",have:false},
+        {name:"Peanuts (unsalted)",qty:"small bag",have:false},
+        {name:"Peanut butter",qty:"1 jar",have:false},
+        {name:"Limes",qty:"2",have:false},
+        {name:"Low-sodium soy sauce",qty:"1 bottle",have:false},
+        {name:"Chili crunch oil",qty:"1 jar",have:false},
+        {name:"Maple syrup",qty:"small bottle",have:false},
+        {name:"Sriracha",qty:"you have this",have:true}
+      ]
+    }
+  ]
+};
+
+var state = {
+  currentCat: "breakfast",
+  indices: {breakfast:0, meals:0},
+  servings: {},
+  checked: {}
+};
+
+try { state.checked = JSON.parse(localStorage.getItem("rd_checked") || "{}"); } catch(e) { state.checked = {}; }
+
+RECIPES.breakfast.forEach(function(r){ state.servings[r.id] = r.baseServings; });
+RECIPES.meals.forEach(function(r){ state.servings[r.id] = r.baseServings; });
+
+function showPage(page, btn) {
+  document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
+  document.getElementById("page-"+page).classList.add("active");
+  document.querySelectorAll(".nav-links button").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active");
+  if(page === "shopping") renderShopping();
+}
+
+function showCat(cat, btn) {
+  state.currentCat = cat;
+  document.getElementById("cat-breakfast").style.display = cat === "breakfast" ? "block" : "none";
+  document.getElementById("cat-meals").style.display = cat === "meals" ? "block" : "none";
+  document.querySelectorAll(".page-tab").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active");
+}
+
+function prevRecipe(cat) {
+  if(state.indices[cat] > 0){ state.indices[cat]--; renderRecipe(cat); }
+}
+function nextRecipe(cat) {
+  if(state.indices[cat] < RECIPES[cat].length - 1){ state.indices[cat]++; renderRecipe(cat); }
+}
+function jumpRecipe(cat, idx) {
+  state.indices[cat] = idx;
+  renderRecipe(cat);
+}
+function changeServings(id, cat, delta) {
+  state.servings[id] = Math.max(1, state.servings[id] + delta);
+  renderRecipe(cat);
+}
+
+function fmtQty(n) {
+  if(n === 0) return "0";
+  var whole = Math.floor(n);
+  var frac = Math.round((n - whole) * 100) / 100;
+  var fracs = {"0.25":"1/4","0.5":"1/2","0.75":"3/4","0.33":"1/3","0.67":"2/3","0.13":"1/8"};
+  var best = null, bestDiff = 999;
+  Object.keys(fracs).forEach(function(k){
+    var diff = Math.abs(parseFloat(k) - frac);
+    if(diff < bestDiff){ bestDiff = diff; best = k; }
+  });
+  if(bestDiff < 0.06) {
+    var fs = fracs[best];
+    return whole > 0 ? (whole + " " + fs) : fs;
+  }
+  if(n >= 10) return Math.round(n).toString();
+  return parseFloat(n.toFixed(1)).toString();
+}
+
+function renderRecipe(cat) {
+  var recipes = RECIPES[cat];
+  var idx = state.indices[cat];
+  var r = recipes[idx];
+  var servings = state.servings[r.id];
+  var ratio = servings / r.baseServings;
+  var n = r.nutrition;
+
+  function ns(v){ return Math.round(v * ratio); }
+
+  var tabs = recipes.map(function(rec, i){
+    var words = rec.name.split(" ").slice(0,2).join(" ");
+    return '<button class="cat-tab' + (i===idx?" active":"") + '" onclick="jumpRecipe(\'' + cat + '\',' + i + ')">' + words + '</button>';
+  }).join("");
+
+  var prevDis = idx === 0 ? " disabled" : "";
+  var nextDis = idx === recipes.length - 1 ? " disabled" : "";
+
+  var ings = r.ingredients.map(function(ing){
+    var scaled = ing.qty * servings;
+    return '<li><span class="qty">' + fmtQty(scaled) + ' ' + ing.unit + '</span><span class="iname">' + ing.name + '</span>' + (ing.mod ? '<span class="mod">' + ing.mod + '</span>' : '') + '</li>';
+  }).join("");
+
+  var steps = r.steps.map(function(s, i){
+    return '<div class="step"><span class="step-num">' + (i+1) + '</span><span class="step-text">' + s + '</span></div>';
+  }).join("");
+
+  var hnotes = r.healthNotes.map(function(n){ return '<span class="hnote">' + n + '</span>'; }).join("");
+  var wnotes = r.watchNotes.map(function(n){ return '<span class="wnote">' + n + '</span>'; }).join("");
+  var badges = r.badges.map(function(b){ return '<span class="badge">' + b + '</span>'; }).join("");
+
+  var html = '<div class="recipe-nav">'
+    + '<div class="cat-tabs">' + tabs + '</div>'
+    + '<div class="nav-right">'
+    + '<span class="recipe-counter">' + (idx+1) + ' of ' + recipes.length + '</span>'
+    + '<div class="recipe-nav-arrows">'
+    + '<button class="arrow-btn" onclick="prevRecipe(\'' + cat + '\')"' + prevDis + '>&#8592;</button>'
+    + '<button class="arrow-btn" onclick="nextRecipe(\'' + cat + '\')"' + nextDis + '>&#8594;</button>'
+    + '</div></div></div>'
+    + '<div class="recipe-card">'
+    + '<div class="recipe-header">'
+    + '<div class="recipe-header-top">'
+    + '<div><div class="recipe-title">' + r.name + '</div><div class="recipe-desc">' + r.desc + '</div></div>'
+    + '<div class="recipe-badges">' + badges + '</div>'
+    + '</div>'
+    + '<div class="serving-control"><span class="serving-label">Servings</span>'
+    + '<div class="serving-btns">'
+    + '<button class="s-btn" onclick="changeServings(\'' + r.id + '\',\'' + cat + '\',-1)">&#8722;</button>'
+    + '<span class="serving-num">' + servings + '</span>'
+    + '<button class="s-btn" onclick="changeServings(\'' + r.id + '\',\'' + cat + '\',1)">&#43;</button>'
+    + '</div></div></div>'
+    + '<div class="nutrition-strip">'
+    + '<div class="nutrition-cell"><span class="val">' + ns(n.calories) + '</span><span class="lbl">Calories</span></div>'
+    + '<div class="nutrition-cell"><span class="val">' + ns(n.protein) + 'g</span><span class="lbl">Protein</span></div>'
+    + '<div class="nutrition-cell"><span class="val">' + ns(n.carbs) + 'g</span><span class="lbl">Carbs</span></div>'
+    + '<div class="nutrition-cell"><span class="val">' + ns(n.fiber) + 'g</span><span class="lbl">Fiber</span></div>'
+    + '<div class="nutrition-cell"><span class="val">' + ns(n.addedSugar) + 'g</span><span class="lbl">Added sugar</span></div>'
+    + '<div class="nutrition-cell"><span class="val">' + ns(n.sodium) + 'mg</span><span class="lbl">Sodium</span></div>'
+    + '</div>'
+    + '<div class="recipe-body">'
+    + '<div class="ingredients-col"><div class="col-label">Ingredients for ' + servings + ' servings</div><ul class="ingredient-list">' + ings + '</ul></div>'
+    + '<div class="steps-col"><div class="col-label">Instructions</div>' + steps + '</div>'
+    + '</div>'
+    + '<div class="health-notes"><div class="col-label" style="margin-bottom:0.5rem">Why this works for your markers</div>'
+    + '<div class="health-note-list">' + hnotes + wnotes + '</div></div>'
+    + '</div>';
+
+  document.getElementById(cat + "-recipe-container").innerHTML = html;
+}
+
+function getKey(recipeId, itemName) {
+  return recipeId + "__" + itemName;
+}
+
+function toggleItem(key) {
+  state.checked[key] = !state.checked[key];
+  try { localStorage.setItem("rd_checked", JSON.stringify(state.checked)); } catch(e){}
+  renderShopping();
+}
+
+function clearChecked() {
+  state.checked = {};
+  try { localStorage.setItem("rd_checked", JSON.stringify(state.checked)); } catch(e){}
+  renderShopping();
+}
+
+function renderShopping() {
+  var allRecipes = RECIPES.breakfast.concat(RECIPES.meals);
+  var totalItems = 0, checkedItems = 0;
+  var html = "";
+
+  allRecipes.forEach(function(r) {
+    var sectionDone = 0;
+    totalItems += r.grocery.length;
+    r.grocery.forEach(function(it){
+      var key = getKey(r.id, it.name);
+      if(it.have || state.checked[key]) sectionDone++;
+    });
+    checkedItems += sectionDone;
+
+    html += '<div class="shop-section">'
+      + '<div class="shop-section-header">'
+      + '<span class="shop-section-title">' + r.name + '</span>'
+      + '<span class="shop-section-count">' + sectionDone + '/' + r.grocery.length + ' done</span>'
+      + '</div>';
+
+    r.grocery.forEach(function(it) {
+      var key = getKey(r.id, it.name);
+      var isChecked = it.have || !!state.checked[key];
+      var checkedClass = isChecked ? " checked" : "";
+      var onclick = it.have ? "" : ' onclick="toggleItem(\'' + key + '\')"';
+      var haveTag = it.have ? '<span class="have-tag">already have</span>' : "";
+      html += '<div class="shop-item' + checkedClass + '"' + onclick + '>'
+        + '<div class="shop-checkbox"><span class="checkmark">&#10003;</span></div>'
+        + '<span class="shop-item-name">' + it.name + haveTag + '</span>'
+        + '<span class="shop-item-qty">' + it.qty + '</span>'
+        + '</div>';
+    });
+
+    html += '</div>';
+  });
+
+  var pct = totalItems > 0 ? Math.round(checkedItems / totalItems * 100) : 0;
+  document.getElementById("progress-label").textContent = checkedItems + " of " + totalItems + " items checked";
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("shopping-content").innerHTML = html;
+}
+
+function initCat(cat) {
+  var wrap = document.getElementById("cat-" + cat);
+  wrap.innerHTML = '<div id="' + cat + '-recipe-container"></div>';
+  renderRecipe(cat);
+}
+
+initCat("breakfast");
+initCat("meals");
+</script>
+</body>
+</html>
