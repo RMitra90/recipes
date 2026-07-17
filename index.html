@@ -83,6 +83,12 @@ nav{background:var(--green);padding:0 1.5rem;display:flex;align-items:center;jus
 .hnote::before{content:"✓";font-weight:700}
 .wnote{background:var(--red-light);border:1px solid #F5C6C6;border-radius:7px;font-size:0.75rem;color:var(--red);padding:0.25rem 0.6rem;display:flex;align-items:center;gap:0.3rem}
 .wnote::before{content:"⚠"}
+.dd-row{display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.dd-wrap{position:relative}
+.dd-label{font-size:0.65rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;display:block}
+.dd-select{appearance:none;-webkit-appearance:none;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:0.5rem 2rem 0.5rem 0.85rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;color:var(--ink);cursor:pointer;min-width:200px;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234A7C5F' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.85rem center;transition:border-color 0.15s}
+.dd-select:hover{border-color:var(--green)}
+.dd-select:focus{outline:none;border-color:var(--green)}
 .shop-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
 .shop-header h2{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400}
 .clear-btn{background:none;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--muted);padding:0.4rem 0.85rem;cursor:pointer;transition:all 0.15s}
@@ -151,6 +157,7 @@ var RECIPES = {
   breakfast: [
     {
       id: "oats",
+      subcat: "Overnight Oats",
       name: "Coffee Protein Overnight Oats",
       desc: "Cappuccino-flavored protein oats in mason jars. Zero added sugar, 28g protein per jar.",
       badges: ["5 min prep","No cooking","12 servings","95mg caffeine"],
@@ -170,7 +177,7 @@ var RECIPES = {
         "Pour in <strong>1/2 cup 2% milk</strong> and <strong>1/4 cup Greek yogurt</strong>. Stir well until no dry clumps remain and protein powder is fully dissolved.",
         "Seal jars and refrigerate for at least <strong>6 hours or overnight</strong>. Oats absorb the liquid and thicken significantly.",
         "Each morning, top with <strong>1/4 cup fresh or frozen berries</strong> and eat cold straight from the jar. No heating needed.",
-        "Keeps in the fridge for <strong>up to 5 days</strong>. Prep all 12 jars Sunday to cover the full week for you and your fiancee."
+        "Keeps in the fridge for <strong>up to 5 days</strong>. Prep all 12 jars Sunday night to cover the full week."
       ],
       healthNotes: ["0g added sugar","High protein stabilizes blood sugar","Fiber slows glucose absorption","Berries are lowest-glycemic fruit","Cinnamon supports blood sugar regulation","Great for skipping breakfast habit"],
       watchNotes: ["95mg caffeine per jar — check sensitivity before sharing"],
@@ -182,6 +189,46 @@ var RECIPES = {
         {name:"Chia seeds",qty:"bulk bag",have:false},
         {name:"Ground cinnamon",qty:"small jar",have:false},
         {name:"Frozen berries (blueberries or raspberries)",qty:"2 x 12oz bags",have:false},
+        {name:"Wide-mouth 16oz mason jars",qty:"pack of 12",have:false}
+      ]
+    },
+    {
+      id: "tiramisuoats",
+      subcat: "Overnight Oats",
+      name: "Banana Tiramisu Protein Oats",
+      desc: "Coffee-soaked protein oats with banana and a dusting of cocoa, inspired by tiramisu. No added sugar.",
+      badges: ["5 min prep","No cooking","12 servings","Coffee flavor"],
+      baseServings: 12,
+      nutrition: {calories:300,protein:29,carbs:34,fiber:7,addedSugar:0,sodium:170},
+      ingredients: [
+        {qty:0.5,unit:"cup",name:"Rolled oats (old fashioned)",mod:""},
+        {qty:1,unit:"tbsp",name:"Dymatize ISO100 Cappuccino",mod:""},
+        {qty:0.5,unit:"cup",name:"2% milk",mod:""},
+        {qty:0.25,unit:"cup",name:"Plain low-fat Greek yogurt",mod:""},
+        {qty:0.5,unit:"tbsp",name:"Chia seeds",mod:""},
+        {qty:0.25,unit:"tsp",name:"Ground cinnamon",mod:""},
+        {qty:0.25,unit:"",name:"Small banana, mashed (1/4 per jar)",mod:""},
+        {qty:0.5,unit:"tsp",name:"Unsweetened cocoa powder",mod:"dust on top"}
+      ],
+      steps: [
+        "In each wide-mouth 16oz mason jar, add <strong>1/2 cup oats</strong>, <strong>1 tbsp protein powder</strong>, <strong>1/2 tbsp chia seeds</strong>, and <strong>1/4 tsp cinnamon</strong>. Stir together.",
+        "Mash <strong>1/4 small banana</strong> per jar and mix it into the dry ingredients so it soaks in like a tiramisu layer, not just a topping.",
+        "Pour in <strong>1/2 cup 2% milk</strong> and <strong>1/4 cup Greek yogurt</strong>. Stir well until no dry clumps remain and everything is fully combined.",
+        "Seal jars and refrigerate for at least <strong>6 hours or overnight</strong>. Oats absorb the liquid and thicken significantly.",
+        "Each morning, dust the top with <strong>1/2 tsp unsweetened cocoa powder</strong> just like a classic tiramisu finish. Eat cold straight from the jar.",
+        "Keeps in the fridge for <strong>up to 5 days</strong>. Prep all 12 jars Sunday night to cover the full week."
+      ],
+      healthNotes: ["0g added sugar — banana provides all the sweetness","High protein stabilizes blood sugar","Small banana portion (1/4, not 1/2) limits sugar impact","Unsweetened cocoa adds antioxidants with negligible carbs","Coffee flavor doubled from protein powder","Cinnamon supports blood sugar regulation"],
+      watchNotes: ["Contains caffeine from protein powder — check sensitivity before sharing"],
+      grocery: [
+        {name:"Rolled oats (old fashioned)",qty:"1 large canister",have:false},
+        {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",have:false},
+        {name:"2% milk",qty:"1 gallon",have:false},
+        {name:"Plain low-fat Greek yogurt",qty:"32oz tub",have:false},
+        {name:"Chia seeds",qty:"bulk bag",have:false},
+        {name:"Ground cinnamon",qty:"small jar",have:false},
+        {name:"Bananas",qty:"3-4 small",have:false},
+        {name:"Unsweetened cocoa powder",qty:"small container",have:false},
         {name:"Wide-mouth 16oz mason jars",qty:"pack of 12",have:false}
       ]
     }
@@ -234,6 +281,83 @@ var RECIPES = {
         {name:"Maple syrup",qty:"small bottle",have:false},
         {name:"Sriracha",qty:"1 bottle",have:false}
       ]
+    },
+    {
+      id: "kabobs",
+      name: "Chicken Kabab",
+      desc: "Tender marinated chicken skewers with lemon, herbs and garlic. Easy weeknight dinner with minimal oil.",
+      badges: ["55 min total","10 min cook","6 servings"],
+      baseServings: 6,
+      nutrition: {calories:120,protein:16,carbs:4,fiber:1,addedSugar:2,sodium:283},
+      ingredients: [
+        {qty:2,unit:"",name:"Large chicken breasts, cubed",mod:""},
+        {qty:0.5,unit:"",name:"Large lemon, juiced",mod:""},
+        {qty:0.5,unit:"tbsp",name:"Honey",mod:""},
+        {qty:1,unit:"tbsp",name:"Olive oil",mod:""},
+        {qty:1,unit:"tsp",name:"Balsamic vinegar",mod:""},
+        {qty:0.5,unit:"tbsp",name:"Oregano",mod:""},
+        {qty:1.5,unit:"tsp",name:"Garlic powder",mod:""},
+        {qty:0.25,unit:"tsp",name:"Salt (reduced for cardiovascular health)",mod:"reduced"},
+        {qty:0.5,unit:"tsp",name:"Black pepper",mod:""},
+        {qty:1,unit:"tbsp",name:"Fresh parsley, chopped",mod:"to serve"}
+      ],
+      steps: [
+        "In a large bowl or zip-lock bag, combine <strong>lemon juice, honey, balsamic vinegar, oregano, garlic powder, salt,</strong> and <strong>black pepper</strong>. Stir together.",
+        "Cut chicken breasts into <strong>1-inch cubes</strong>. Add to the marinade, cover, and refrigerate for at least <strong>30 minutes</strong> — overnight is even better.",
+        "Preheat air fryer to <strong>400 degrees F</strong>. While preheating, thread approximately <strong>4 chicken cubes</strong> onto each skewer.",
+        "Brush or spray the air fryer basket with olive oil. Place skewers in a <strong>single layer</strong>. Cook at 400F for <strong>5 minutes</strong>, flip, then cook <strong>5 more minutes</strong>.",
+        "Check internal temperature reaches <strong>165 degrees F</strong>. Garnish with fresh parsley and serve immediately."
+      ],
+      healthNotes: ["16g protein per skewer with minimal fat","Air-fried — no heavy oil needed","Salt reduced to 1/4 tsp for cardiovascular health","Low carbs and controlled sodium","Pairs well with nonstarchy vegetables for a complete meal","Oregano and garlic are anti-inflammatory"],
+      watchNotes: [],
+      grocery: [
+        {name:"Chicken breasts (boneless, skinless)",qty:"2 large",have:false},
+        {name:"Lemons",qty:"1",have:false},
+        {name:"Honey",qty:"small jar",have:false},
+        {name:"Olive oil",qty:"1 bottle",have:false},
+        {name:"Balsamic vinegar",qty:"1 bottle",have:false},
+        {name:"Dried oregano",qty:"small jar",have:false},
+        {name:"Garlic powder",qty:"small jar",have:false},
+        {name:"Fresh parsley",qty:"1 bunch",have:false},
+        {name:"Bamboo skewers",qty:"1 pack",have:false}
+      ]
+    },
+    {
+      id: "thaibasil",
+      name: "Thai Basil Chicken",
+      desc: "Spicy Thai basil chicken stir-fry with garlic and chili. Quick 25-minute weeknight meal with bold flavor and minimal ingredients.",
+      badges: ["25 min total","4 servings","High protein","Spicy"],
+      baseServings: 4,
+      nutrition: {calories:180,protein:28,carbs:8,fiber:1,addedSugar:1,sodium:580},
+      ingredients: [
+        {qty:2,unit:"",name:"Chicken breasts, cut into bite-size pieces",mod:""},
+        {qty:4,unit:"",name:"Thai chile peppers, or more to taste",mod:""},
+        {qty:4,unit:"",name:"Garlic cloves, peeled",mod:""},
+        {qty:4,unit:"tbsp",name:"Low-sodium soy sauce",mod:"swap"},
+        {qty:3,unit:"tbsp",name:"Hoisin sauce",mod:"swap"},
+        {qty:1,unit:"tsp",name:"White sugar",mod:""},
+        {qty:28,unit:"",name:"Leaves fresh Thai basil",mod:""},
+        {qty:1,unit:"",name:"Cooking spray",mod:""}
+      ],
+      steps: [
+        "Grind <strong>Thai chile peppers</strong> and <strong>garlic</strong> together using a mortar and pestle or food processor until a coarse paste forms.",
+        "Coat a large skillet with <strong>cooking spray</strong> and heat over medium-high heat. Add the pepper-garlic mixture and cook, stirring, until fragrant and garlic is golden brown — about <strong>1 minute</strong>.",
+        "Add <strong>chicken pieces</strong> and cook, stirring, until about halfway cooked — about <strong>3 minutes</strong>.",
+        "Mix in <strong>low-sodium soy sauce, hoisin sauce,</strong> and <strong>sugar</strong>. Cook and stir until chicken is no longer pink in the center — about <strong>3 more minutes</strong>.",
+        "Add <strong>Thai basil leaves</strong> and stir for 10 seconds. Remove from heat and continue stirring until basil is wilted. Serve immediately."
+      ],
+      healthNotes: ["High protein with minimal fat","Low sugar — only 1/4 tsp per serving","Low-sodium soy sauce reduces sodium significantly","Hoisin replaces oyster sauce for familiar flavor","Thai basil and garlic are anti-inflammatory","No rice — pairs well with cauliflower rice or nonstarchy vegetables"],
+      watchNotes: ["Adjust chili quantity to your heat tolerance"],
+      grocery: [
+        {name:"Chicken breasts (boneless, skinless)",qty:"2 large",have:false},
+        {name:"Thai chile peppers",qty:"4-6 peppers",have:false},
+        {name:"Garlic cloves",qty:"1 head",have:false},
+        {name:"Low-sodium soy sauce",qty:"1 bottle",have:false},
+        {name:"Hoisin sauce",qty:"1 jar",have:false},
+        {name:"White sugar",qty:"small bag",have:false},
+        {name:"Fresh Thai basil",qty:"1 bunch",have:false},
+        {name:"Cooking spray",qty:"1 can",have:false}
+      ]
     }
   ]
 };
@@ -241,6 +365,7 @@ var RECIPES = {
 var state = {
   currentCat: "breakfast",
   indices: {breakfast:0, meals:0},
+  subcatFilter: {breakfast: null, meals: null},
   servings: {},
   checked: {}
 };
@@ -266,11 +391,32 @@ function showCat(cat, btn) {
   btn.classList.add("active");
 }
 
+function getSubcats(cat) {
+  var subs = [];
+  RECIPES[cat].forEach(function(r){
+    if(r.subcat && subs.indexOf(r.subcat) === -1) subs.push(r.subcat);
+  });
+  return subs;
+}
+
+function getVisibleRecipes(cat) {
+  var filter = state.subcatFilter[cat];
+  if(!filter) return RECIPES[cat];
+  return RECIPES[cat].filter(function(r){ return r.subcat === filter; });
+}
+
+function setSubcatFilter(cat, subcat) {
+  state.subcatFilter[cat] = subcat;
+  state.indices[cat] = 0;
+  renderRecipe(cat);
+}
+
 function prevRecipe(cat) {
   if(state.indices[cat] > 0){ state.indices[cat]--; renderRecipe(cat); }
 }
 function nextRecipe(cat) {
-  if(state.indices[cat] < RECIPES[cat].length - 1){ state.indices[cat]++; renderRecipe(cat); }
+  var recipes = getVisibleRecipes(cat);
+  if(state.indices[cat] < recipes.length - 1){ state.indices[cat]++; renderRecipe(cat); }
 }
 function jumpRecipe(cat, idx) {
   state.indices[cat] = idx;
@@ -300,8 +446,10 @@ function fmtQty(n) {
 }
 
 function renderRecipe(cat) {
-  var recipes = RECIPES[cat];
+  var recipes = getVisibleRecipes(cat);
+  if(recipes.length === 0){ recipes = RECIPES[cat]; state.subcatFilter[cat] = null; }
   var idx = state.indices[cat];
+  if(idx >= recipes.length) idx = 0;
   var r = recipes[idx];
   var servings = state.servings[r.id];
   var ratio = servings / r.baseServings;
@@ -309,10 +457,22 @@ function renderRecipe(cat) {
 
   function ns(v){ return Math.round(v * ratio); }
 
-  var tabs = recipes.map(function(rec, i){
-    var words = rec.name.split(" ").slice(0,2).join(" ");
-    return '<button class="cat-tab' + (i===idx?" active":"") + '" onclick="jumpRecipe(\'' + cat + '\',' + i + ')">' + words + '</button>';
+  var subcats = getSubcats(cat);
+  var subcatHtml = "";
+  if(subcats.length > 0) {
+    var opts = '<option value="">All ' + (cat==="breakfast"?"Breakfast":"Meals") + '</option>';
+    subcats.forEach(function(sc){
+      opts += '<option value="' + sc + '"' + (state.subcatFilter[cat]===sc ? " selected" : "") + '>' + sc + '</option>';
+    });
+    subcatHtml = '<div class="dd-wrap"><span class="dd-label">Category</span>'
+      + '<select class="dd-select" onchange="setSubcatFilter(\'' + cat + '\', this.value || null)">' + opts + '</select></div>';
+  }
+
+  var recipeOpts = recipes.map(function(rec, i){
+    return '<option value="' + i + '"' + (i===idx ? " selected" : "") + '>' + rec.name + '</option>';
   }).join("");
+  var recipeDropdown = '<div class="dd-wrap"><span class="dd-label">Recipe</span>'
+    + '<select class="dd-select" onchange="jumpRecipe(\'' + cat + '\', parseInt(this.value))">' + recipeOpts + '</select></div>';
 
   var prevDis = idx === 0 ? " disabled" : "";
   var nextDis = idx === recipes.length - 1 ? " disabled" : "";
@@ -330,14 +490,16 @@ function renderRecipe(cat) {
   var wnotes = r.watchNotes.map(function(n){ return '<span class="wnote">' + n + '</span>'; }).join("");
   var badges = r.badges.map(function(b){ return '<span class="badge">' + b + '</span>'; }).join("");
 
-  var html = '<div class="recipe-nav">'
-    + '<div class="cat-tabs">' + tabs + '</div>'
-    + '<div class="nav-right">'
-    + '<span class="recipe-counter">' + (idx+1) + ' of ' + recipes.length + '</span>'
+  var html = '<div class="dd-row">'
+    + subcatHtml
+    + recipeDropdown
+    + '<div class="dd-wrap" style="align-self:flex-end">'
     + '<div class="recipe-nav-arrows">'
     + '<button class="arrow-btn" onclick="prevRecipe(\'' + cat + '\')"' + prevDis + '>&#8592;</button>'
     + '<button class="arrow-btn" onclick="nextRecipe(\'' + cat + '\')"' + nextDis + '>&#8594;</button>'
-    + '</div></div></div>'
+    + '</div></div>'
+    + '<span class="recipe-counter" style="align-self:flex-end;padding-bottom:0.5rem">' + (idx+1) + ' of ' + recipes.length + '</span>'
+    + '</div>'
     + '<div class="recipe-card">'
     + '<div class="recipe-header">'
     + '<div class="recipe-header-top">'
