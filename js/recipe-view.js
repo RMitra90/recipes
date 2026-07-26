@@ -13,13 +13,6 @@
   var fmtUnit = RB.format.fmtUnit;
   var esc = RB.format.esc;
 
-  // Stands in for photography. Hues are drawn from the brand's green/copper
-  // family and assigned by position, so neighbouring cards always differ --
-  // hashing the id clustered several recipes into the same pink.
-  var TINTS = [145, 28, 192, 82, 12, 258];
-
-  function tintFor(i) { return TINTS[i % TINTS.length]; }
-
   // --- picker ----------------------------------------------------------------
 
   // Sits above both views. Scrolling a grid to reach a recipe is slow on a
@@ -57,10 +50,9 @@
 
   // --- index -----------------------------------------------------------------
 
-  function card(r, i) {
+  function card(r) {
     var n = r.nutrition;
-    return '<button class="rcard" data-open="' + esc(r.id) + '" style="--tint:' + tintFor(i) + '">'
-      + '<span class="rcard-art" aria-hidden="true"><span>' + esc(r.name.charAt(0)) + "</span></span>"
+    return '<button class="rcard" data-open="' + esc(r.id) + '">'
       + '<span class="rcard-body">'
       + '<span class="rcard-title">' + esc(r.name) + "</span>"
       + '<span class="rcard-desc">' + esc(r.desc) + "</span>"
@@ -78,7 +70,7 @@
     var recipes = store.getVisibleRecipes(cat);
     var grid = recipes.length === 0
       ? '<p class="empty-note">No recipes in that category yet.</p>'
-      : '<div class="rgrid">' + recipes.map(function (r, i) { return card(r, i); }).join("") + "</div>";
+      : '<div class="rgrid">' + recipes.map(card).join("") + "</div>";
     document.getElementById(cat + "-recipe-container").innerHTML = picker(cat, null) + grid;
   }
 
