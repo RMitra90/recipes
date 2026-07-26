@@ -36,14 +36,14 @@ window.RecipeBook.data.breakfast = [
     healthNotes: ["0g added sugar","High protein stabilizes blood sugar","Fiber slows glucose absorption","Berries are lowest-glycemic fruit","Cinnamon supports blood sugar regulation","Great for skipping breakfast habit"],
     watchNotes: ["95mg caffeine per jar — check sensitivity before sharing"],
     grocery: [
-      {name:"Rolled oats (old fashioned)",qty:"1 large canister",have:false},
-      {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",have:false},
-      {name:"2% milk",qty:"1 gallon",have:false},
-      {name:"Plain low-fat Greek yogurt",qty:"32oz tub",have:false},
-      {name:"Chia seeds",qty:"bulk bag",have:false},
-      {name:"Ground cinnamon",qty:"small jar",have:false},
-      {name:"Frozen berries (blueberries or raspberries)",qty:"2 x 12oz bags",have:false},
-      {name:"Wide-mouth 16oz mason jars",qty:"pack of 12",have:false}
+      {name:"Rolled oats (old fashioned)",qty:"1 large canister",aisle:"Pantry",have:false},
+      {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",aisle:"Pantry",have:false},
+      {name:"2% milk",qty:"1 gallon",aisle:"Dairy",have:false},
+      {name:"Plain low-fat Greek yogurt",qty:"32oz tub",aisle:"Dairy",have:false},
+      {name:"Chia seeds",qty:"bulk bag",aisle:"Pantry",have:false},
+      {name:"Ground cinnamon",qty:"small jar",aisle:"Pantry",have:false},
+      {name:"Frozen berries (blueberries or raspberries)",qty:"2 x 12oz bags",aisle:"Frozen",have:false},
+      {name:"Wide-mouth 16oz mason jars",qty:"pack of 12",aisle:"Household",have:false}
     ]
   },
   {
@@ -75,15 +75,15 @@ window.RecipeBook.data.breakfast = [
     healthNotes: ["0g added sugar — banana provides all the sweetness","High protein stabilizes blood sugar","Small banana portion (1/4, not 1/2) limits sugar impact","Unsweetened cocoa adds antioxidants with negligible carbs","Coffee flavor doubled from protein powder","Cinnamon supports blood sugar regulation"],
     watchNotes: ["Contains caffeine from protein powder — check sensitivity before sharing"],
     grocery: [
-      {name:"Rolled oats (old fashioned)",qty:"1 large canister",have:false},
-      {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",have:false},
-      {name:"2% milk",qty:"1 gallon",have:false},
-      {name:"Plain low-fat Greek yogurt",qty:"32oz tub",have:false},
-      {name:"Chia seeds",qty:"bulk bag",have:false},
-      {name:"Ground cinnamon",qty:"small jar",have:false},
-      {name:"Bananas",qty:"3-4 small",have:false},
-      {name:"Unsweetened cocoa powder",qty:"small container",have:false},
-      {name:"Wide-mouth 16oz mason jars",qty:"pack of 12",have:false}
+      {name:"Rolled oats (old fashioned)",qty:"1 large canister",aisle:"Pantry",have:false},
+      {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",aisle:"Pantry",have:false},
+      {name:"2% milk",qty:"1 gallon",aisle:"Dairy",have:false},
+      {name:"Plain low-fat Greek yogurt",qty:"32oz tub",aisle:"Dairy",have:false},
+      {name:"Chia seeds",qty:"bulk bag",aisle:"Pantry",have:false},
+      {name:"Ground cinnamon",qty:"small jar",aisle:"Pantry",have:false},
+      {name:"Bananas",qty:"3-4 small",aisle:"Produce",have:false},
+      {name:"Unsweetened cocoa powder",qty:"small container",aisle:"Pantry",have:false},
+      {name:"Wide-mouth 16oz mason jars",qty:"pack of 12",aisle:"Household",have:false}
     ]
   },
   {
@@ -114,14 +114,14 @@ window.RecipeBook.data.breakfast = [
     healthNotes: ["Zero added sugar, aligned with blood sugar goals","Highest fiber of any oats in the book at 11g per jar, which helps blunt the glucose response","High protein at 41g per jar for staying power","Peanut butter adds heart healthy unsaturated fat","Berries are added fresh each morning, so the jars keep a clean 5 days"],
     watchNotes: ["Richest jar in the book at about 555 calories, best as a training day or hungry morning option","Contains caffeine from the cappuccino protein powder","Sets thick, loosen with a splash of milk if needed"],
     grocery: [
-      {name:"Rolled oats (old fashioned)",qty:"1 large canister",have:false},
-      {name:"2% milk",qty:"1 gallon",have:false},
-      {name:"Plain low-fat Greek yogurt",qty:"32oz tub",have:false},
-      {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",have:false},
-      {name:"Natural peanut butter (Santa Cruz Organic Creamy)",qty:"1 jar",have:false},
-      {name:"Unsweetened cocoa powder",qty:"small container",have:false},
-      {name:"Chia seeds",qty:"bulk bag",have:false},
-      {name:"Blueberries or strawberries",qty:"3 cups fresh",have:false}
+      {name:"Rolled oats (old fashioned)",qty:"1 large canister",aisle:"Pantry",have:false},
+      {name:"2% milk",qty:"1 gallon",aisle:"Dairy",have:false},
+      {name:"Plain low-fat Greek yogurt",qty:"32oz tub",aisle:"Dairy",have:false},
+      {name:"Dymatize ISO100 Cappuccino",qty:"1 tub",aisle:"Pantry",have:false},
+      {name:"Natural peanut butter (Santa Cruz Organic Creamy)",qty:"1 jar",aisle:"Pantry",have:false},
+      {name:"Unsweetened cocoa powder",qty:"small container",aisle:"Pantry",have:false},
+      {name:"Chia seeds",qty:"bulk bag",aisle:"Pantry",have:false},
+      {name:"Blueberries or strawberries",qty:"3 cups fresh",aisle:"Produce",have:false}
     ]
   }
 ];

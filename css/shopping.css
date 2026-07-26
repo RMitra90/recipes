@@ -10,7 +10,27 @@
 .progress-bar{height:3px;background:var(--border);border-radius:999px;margin-bottom:1.5rem;overflow:hidden}
 .progress-fill{height:100%;background:var(--green);border-radius:999px;transition:width 0.3s}
 
-/* One section per recipe. */
+/* Weekly plan: which recipes feed the list. */
+.planner{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1rem 1.25rem 1.15rem;margin-bottom:1.5rem}
+.planner-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.planner-title{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--green)}
+.planner-actions{display:flex;gap:0.75rem}
+.link-btn{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:0.75rem;color:var(--muted);cursor:pointer;padding:0;text-decoration:underline}
+.link-btn:hover{color:var(--green)}
+.link-btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.planner-sub{font-size:0.75rem;color:var(--muted);margin-top:0.15rem}
+.chip-row{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.8rem}
+.chip{display:flex;align-items:center;gap:0.4rem;background:var(--white);border:1px solid var(--border);border-radius:999px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;color:var(--muted);padding:0.35rem 0.8rem;cursor:pointer;transition:all 0.15s}
+.chip:hover{border-color:var(--green);color:var(--green)}
+.chip:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.chip.on{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.chip-tick{width:12px;height:12px;border:1.5px solid var(--border);border-radius:3px;flex-shrink:0;position:relative}
+.chip.on .chip-tick{background:var(--green);border-color:var(--green)}
+.chip.on .chip-tick::after{content:"";position:absolute;left:3px;top:0;width:3px;height:7px;border:solid #fff;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+
+.empty-note{font-size:0.85rem;color:var(--muted);text-align:center;padding:2.5rem 1rem;background:var(--white);border:1px dashed var(--border);border-radius:14px}
+
+/* One section per aisle, ordered the way a store is walked. */
 .shop-section{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.25rem}
 .shop-section-header{background:var(--green-light);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .shop-section-title{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--green)}
@@ -23,6 +43,8 @@
 .shop-item.checked .shop-item-name{text-decoration:line-through;color:var(--muted)}
 .shop-item-name{flex:1;font-size:0.9rem;color:var(--ink)}
 .shop-item-qty{font-size:0.78rem;color:var(--muted);white-space:nowrap}
+/* Shown only when an item is pulled in by more than one planned recipe. */
+.shop-item-from{font-size:0.7rem;color:var(--green-mid);margin-left:0.45rem;white-space:nowrap}
 
 .shop-checkbox{width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
 .shop-item.checked .shop-checkbox{background:var(--green);border-color:var(--green)}

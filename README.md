@@ -13,22 +13,44 @@ index.html            markup only
 css/
   base.css            reset, design tokens, focus rings
   layout.css          nav, hero, page + tab containers, footer
-  recipe.css          recipe card, nutrition strip, ingredients, steps
-  shopping.css        shopping list, progress bar
+  recipe.css          index grid, recipe card, nutrition, ingredients
+  shopping.css        weekly planner, aisle sections, progress bar
+  print.css           print-only (media="print")
 js/
   data/
     breakfast.js      recipe data
     meals.js          recipe data
   format.js           fmtQty / fmtUnit / esc  (pure, no DOM)
-  store.js            state, persistence, queries
-  recipe-view.js      renders the recipe card
-  shopping-view.js    renders the shopping list
-  app.js              bootstrap, page + tab switching
+  store.js            state, persistence, shopping aggregation
+  recipe-view.js      index grid + recipe detail
+  shopping-view.js    weekly planner + merged shopping list
+  app.js              bootstrap and hash routing
 ```
 
 Everything hangs off one global, `window.RecipeBook`. Scripts are plain
 `<script defer>` in dependency order rather than ES modules, so the page also
 works when opened directly from disk over `file://`.
+
+## Routes
+
+| Hash | View |
+|---|---|
+| `#breakfast` / `#meals` | category index |
+| `#recipe/<id>` | one recipe (shareable link) |
+| `#shopping` | weekly plan and shopping list |
+
+Anything unrecognised falls back to the breakfast index.
+
+## How the shopping list works
+
+The list is built from the recipes ticked under **Cooking this week**, not from
+every recipe in the book. Items are merged to one row each and grouped by aisle
+in the order `store.js` lists them (`AISLE_ORDER`). A `have: true` item shows as
+already owned and is not interactive.
+
+Three slices persist to `localStorage`: `rd_selected` (the weekly plan),
+`rd_checked` (ticked groceries), `rd_struck` (ingredients crossed off while
+cooking).
 
 ## Adding a recipe
 
@@ -48,9 +70,12 @@ Copy the shape of an existing entry:
   steps: ["Inline <strong>markup</strong> is allowed here."],
   healthNotes: ["Green check tags"],
   watchNotes: ["Red warning tags"],
-  grocery: [{name:"Rolled oats", qty:"1 canister", have:false}]
+  grocery: [{name:"Rolled oats", qty:"1 canister", aisle:"Pantry", have:false}]
 }
 ```
+
+`aisle` must be one of `Produce`, `Dairy`, `Meat`, `Frozen`, `Pantry`,
+`Household` — anything else falls back to Pantry.
 
 Two conventions matter:
 

@@ -1,7 +1,7 @@
-// Renders the shopping list: one section per recipe, plus overall progress.
+// Shopping list: pick the week's recipes, then shop a merged list by aisle.
 //
-// Rows behave as checkboxes and are keyed on item name, so a staple used by
-// several recipes is ticked off everywhere at once.
+// Items are collapsed to one row each and grouped the way a store is walked,
+// rather than repeated once per recipe.
 
 (function (RB) {
   "use strict";
@@ -9,70 +9,99 @@
   var store = RB.store;
   var esc = RB.format.esc;
 
+  function planner() {
+    var all = store.allRecipes();
+    var on = store.selectedRecipes().length;
+    return '<section class="planner"><div class="planner-head">'
+      + '<h3 class="planner-title">Cooking this week</h3>'
+      + '<div class="planner-actions">'
+      + '<button class="link-btn" data-select="all">Select all</button>'
+      + '<button class="link-btn" data-select="none">Clear</button>'
+      + "</div></div>"
+      + '<p class="planner-sub">' + on + " of " + all.length + " recipes planned</p>"
+      + '<div class="chip-row">'
+      + all.map(function (r) {
+          var sel = store.isSelected(r.id);
+          return '<button class="chip' + (sel ? " on" : "") + '" data-plan="' + esc(r.id) + '"'
+            + ' role="checkbox" aria-checked="' + sel + '">'
+            + '<span class="chip-tick" aria-hidden="true"></span>' + esc(r.name) + "</button>";
+        }).join("")
+      + "</div></section>";
+  }
+
   function itemRow(it) {
     var key = store.itemKey(it.name);
     var checked = it.have || store.isChecked(it.name);
-    // Items marked have:true are informational only, so they are not interactive.
     var interactive = it.have
       ? ""
       : ' data-key="' + esc(key) + '" tabindex="0" role="checkbox" aria-checked="' + checked + '"';
+    // Only worth naming the source recipes when an item is shared.
+    var from = it.recipes.length > 1
+      ? '<span class="shop-item-from">' + it.recipes.length + " recipes</span>"
+      : "";
     var haveTag = it.have ? '<span class="have-tag">already have</span>' : "";
 
     return '<div class="shop-item' + (checked ? " checked" : "") + '"' + interactive + ">"
       + '<div class="shop-checkbox"><span class="checkmark">&#10003;</span></div>'
-      + '<span class="shop-item-name">' + esc(it.name) + haveTag + "</span>"
+      + '<span class="shop-item-name">' + esc(it.name) + haveTag + from + "</span>"
       + '<span class="shop-item-qty">' + esc(it.qty) + "</span>"
       + "</div>";
   }
 
   function render() {
-    var total = 0, done = 0, html = "";
+    var groups = store.shoppingList();
+    var totals = store.shoppingTotals();
 
-    store.allRecipes().forEach(function (r) {
-      var sectionDone = r.grocery.filter(function (it) {
-        return it.have || store.isChecked(it.name);
-      }).length;
-      total += r.grocery.length;
-      done += sectionDone;
+    var list = groups.length === 0
+      ? '<p class="empty-note">No recipes planned yet. Pick a few above and the list builds itself.</p>'
+      : groups.map(function (g) {
+          return '<div class="shop-section"><div class="shop-section-header">'
+            + '<span class="shop-section-title">' + esc(g.aisle) + "</span>"
+            + '<span class="shop-section-count">' + g.done + "/" + g.items.length + " done</span>"
+            + "</div>" + g.items.map(itemRow).join("") + "</div>";
+        }).join("");
 
-      html += '<div class="shop-section"><div class="shop-section-header">'
-        + '<span class="shop-section-title">' + esc(r.name) + "</span>"
-        + '<span class="shop-section-count">' + sectionDone + "/" + r.grocery.length + " done</span>"
-        + "</div>"
-        + r.grocery.map(itemRow).join("")
-        + "</div>";
-    });
+    document.getElementById("shopping-planner").innerHTML = planner();
+    document.getElementById("progress-label").textContent =
+      totals.total === 0 ? "Nothing to buy yet" : totals.done + " of " + totals.total + " items checked";
+    document.getElementById("progress-fill").style.width = totals.pct + "%";
+    document.getElementById("shopping-content").innerHTML = list;
+  }
 
-    var pct = total > 0 ? Math.round(done / total * 100) : 0;
-    document.getElementById("progress-label").textContent = done + " of " + total + " items checked";
-    document.getElementById("progress-fill").style.width = pct + "%";
-    document.getElementById("shopping-content").innerHTML = html;
+  function toggleAt(el) {
+    store.toggleChecked(el.getAttribute("data-key"));
+    render();
   }
 
   function init() {
-    var content = document.getElementById("shopping-content");
+    var page = document.getElementById("page-shopping");
 
-    content.addEventListener("click", function (e) {
+    page.addEventListener("click", function (e) {
+      var plan = e.target.closest("[data-plan]");
+      if (plan) {
+        store.toggleSelected(plan.getAttribute("data-plan"));
+        render();
+        RB.recipeView.render(store.state.currentCat);
+        return;
+      }
+
+      var sel = e.target.closest("[data-select]");
+      if (sel) { store.setAllSelected(sel.getAttribute("data-select") === "all"); render(); return; }
+
+      if (e.target.closest("#clear-checked")) { store.clearChecked(); render(); return; }
+
       var item = e.target.closest(".shop-item[data-key]");
-      if (!item) return;
-      store.toggleChecked(item.getAttribute("data-key"));
-      render();
+      if (item) toggleAt(item);
     });
 
-    content.addEventListener("keydown", function (e) {
+    page.addEventListener("keydown", function (e) {
       if (e.key !== "Enter" && e.key !== " ") return;
       var item = e.target.closest(".shop-item[data-key]");
-      if (!item) return;
-      e.preventDefault();
-      store.toggleChecked(item.getAttribute("data-key"));
-      render();
-    });
-
-    document.getElementById("clear-checked").addEventListener("click", function () {
-      store.clearChecked();
-      render();
+      var chip = e.target.closest("[data-plan]");
+      if (item) { e.preventDefault(); toggleAt(item); }
+      else if (chip && e.key === " ") { e.preventDefault(); chip.click(); }
     });
   }
 
-  RB.shoppingView = { init: init, render: render };
+  RB.shoppingView = {init: init, render: render};
 })(window.RecipeBook = window.RecipeBook || {});

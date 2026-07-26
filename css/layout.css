@@ -3,15 +3,15 @@
 nav{background:var(--green);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200}
 .brand{font-family:'DM Serif Display',serif;color:#fff;font-size:1rem}
 .nav-links{display:flex;gap:0;list-style:none}
-.nav-links button{background:none;border:none;color:rgba(255,255,255,0.65);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;padding:0.4rem 1rem;cursor:pointer;border-radius:6px;transition:all 0.15s}
+.nav-links button{background:none;border:none;color:var(--on-green);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;padding:0.4rem 1rem;cursor:pointer;border-radius:6px;transition:all 0.15s}
 .nav-links button:hover{color:#fff;background:rgba(255,255,255,0.1)}
 .nav-links button.active{color:#fff;background:rgba(255,255,255,0.18)}
 
 .hero{background:var(--green);padding:2.5rem 1.5rem 2rem;text-align:center;border-bottom:3px solid var(--amber)}
-.hero-eyebrow{font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:0.5rem}
+.hero-eyebrow{font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--on-green);margin-bottom:0.5rem}
 .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.5rem);color:#fff;line-height:1.2;margin-bottom:0.5rem}
 .hero h1 em{font-style:italic;color:#A8D5B5}
-.hero-sub{color:rgba(255,255,255,0.65);font-size:0.85rem;max-width:420px;margin:0 auto}
+.hero-sub{color:var(--on-green);font-size:0.85rem;max-width:420px;margin:0 auto}
 
 /* Top-level pages (Recipes / Shopping list). Only .active is displayed. */
 .page{display:none;max-width:860px;margin:0 auto;padding:2rem 1.5rem}
@@ -24,5 +24,5 @@ nav{background:var(--green);padding:0 1.5rem;display:flex;align-items:center;jus
 .page-tab.active{color:var(--green);border-bottom-color:var(--green)}
 .cat-wrap{max-width:860px;margin:0 auto;padding:2rem 1.5rem}
 
-footer{background:var(--green);color:rgba(255,255,255,0.55);text-align:center;padding:1.5rem;font-size:0.75rem;margin-top:3rem}
+footer{background:var(--green);color:var(--on-green);text-align:center;padding:1.5rem;font-size:0.75rem;margin-top:3rem}
 footer strong{color:rgba(255,255,255,0.85)}

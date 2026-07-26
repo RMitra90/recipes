@@ -1,17 +1,31 @@
-/* The recipe card and its controls. Rendered by js/recipe-view.js. */
+/* The recipe index grid and the recipe card. Rendered by js/recipe-view.js. */
 
-/* Selector row above the card: category filter, recipe picker, prev/next, counter. */
-.dd-row{display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
-.dd-wrap{position:relative}
-.dd-label{font-size:0.65rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;display:block}
-.dd-select{appearance:none;-webkit-appearance:none;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:0.5rem 2rem 0.5rem 0.85rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;color:var(--ink);cursor:pointer;min-width:200px;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234A7C5F' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.85rem center;transition:border-color 0.15s}
-.dd-select:hover{border-color:var(--green)}
-.dd-select:focus{outline:none;border-color:var(--green)}
-.recipe-counter{font-size:0.8rem;color:var(--muted)}
-.recipe-nav-arrows{display:flex;gap:0.5rem}
-.arrow-btn{background:var(--white);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--muted);transition:all 0.15s;font-family:'DM Sans',sans-serif}
-.arrow-btn:hover:not([disabled]){border-color:var(--green);color:var(--green)}
-.arrow-btn[disabled]{opacity:0.35;cursor:default}
+/* --- index grid ---------------------------------------------------------- */
+
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.rcard{display:flex;flex-direction:column;text-align:left;background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;font-family:'DM Sans',sans-serif;transition:border-color 0.15s,transform 0.15s,box-shadow 0.15s}
+.rcard:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,90,61,0.09)}
+.rcard:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+/* Stands in for photography: a stable per-recipe tint with the initial set in
+   the display serif, so cards stay distinguishable at a glance. */
+.rcard-art{height:84px;display:flex;align-items:center;justify-content:center;background:hsl(var(--tint) 26% 92%);border-bottom:1px solid var(--border)}
+.rcard-art span{font-family:'DM Serif Display',serif;font-size:2.1rem;color:hsl(var(--tint) 34% 34%)}
+.rcard-body{padding:1rem 1.1rem 1.15rem;display:flex;flex-direction:column;gap:0.5rem;flex:1}
+.rcard-title{font-family:'DM Serif Display',serif;font-size:1.12rem;line-height:1.3;color:var(--green)}
+.rcard-desc{font-size:0.8rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rcard-stats{display:flex;gap:0.9rem;font-size:0.75rem;color:var(--muted);padding-top:0.15rem}
+.rcard-stats b{font-family:'DM Serif Display',serif;font-size:0.95rem;color:var(--ink);font-weight:400}
+.rcard-badges{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:auto;padding-top:0.35rem}
+
+/* --- detail bar ---------------------------------------------------------- */
+
+.detail-bar{display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.detail-bar-right{display:flex;gap:0.5rem}
+.back-btn,.print-btn,.plan-btn{background:var(--white);border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;color:var(--muted);padding:0.45rem 0.9rem;cursor:pointer;transition:all 0.15s}
+.back-btn:hover,.print-btn:hover,.plan-btn:hover{border-color:var(--green);color:var(--green)}
+.plan-btn.on{background:var(--green);border-color:var(--green);color:#fff}
+.back-btn:focus-visible,.print-btn:focus-visible,.plan-btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
 /* Card shell and header. */
 .recipe-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden}
@@ -32,35 +46,53 @@
 
 /* Nutrition strip. Always per serving, so these values never scale. */
 .nutrition-label{font-size:0.65rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;padding:0.7rem 1rem 0.15rem;background:var(--white)}
-.nutrition-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));border-bottom:1px solid var(--border)}
-.nutrition-cell{padding:0.85rem 1rem;text-align:center;border-right:1px solid var(--border)}
-.nutrition-cell:last-child{border-right:none}
+/* Fixed 6-up on desktop, 3-up on narrow screens. auto-fit was reflowing into
+   an uneven 4+2 whose cell borders did not line up across the wrap. */
+.nutrition-strip{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--border);gap:1px;background:var(--border)}
+.nutrition-cell{padding:0.85rem 0.5rem;text-align:center;background:var(--white)}
+@media(max-width:700px){.nutrition-strip{grid-template-columns:repeat(3,1fr)}}
 .nutrition-cell .val{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--ink);display:block}
 .nutrition-cell .lbl{font-size:0.65rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:0.1rem}
 
-/* Two-column body: ingredients left, instructions right. Stacks under 600px. */
-.recipe-body{display:grid;grid-template-columns:1fr 1.35fr}
+/* Two-column body: ingredients left, instructions right. Stacks under 600px.
+   align-items:start stops the shorter column stretching to match the taller. */
+.recipe-body{display:grid;grid-template-columns:1fr 1.35fr;align-items:start}
 @media(max-width:600px){.recipe-body{grid-template-columns:1fr}}
 .ingredients-col{padding:1.25rem 1.5rem;border-right:1px solid var(--border)}
 .steps-col{padding:1.25rem 1.5rem}
 .col-label{font-size:0.65rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.9rem}
+.col-head{display:flex;align-items:baseline;justify-content:space-between;gap:0.5rem}
+.col-head .col-label{margin-bottom:0.9rem}
+.reset-link{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:var(--muted);cursor:pointer;padding:0;text-decoration:underline}
+.reset-link:hover{color:var(--green)}
 
+/* Ingredients double as a cooking checklist: tap to cross off. */
 .ingredient-list{list-style:none}
-.ingredient-list li{display:flex;gap:0.5rem;padding:0.38rem 0;border-bottom:1px solid var(--green-light);font-size:0.88rem;align-items:baseline}
-.ingredient-list li:last-child{border-bottom:none}
+.ing{display:flex;gap:0.5rem;padding:0.4rem 0;border-bottom:1px solid var(--green-light);font-size:0.88rem;align-items:baseline;cursor:pointer;user-select:none;transition:opacity 0.15s}
+.ing:last-child{border-bottom:none}
+.ing:hover{opacity:0.75}
+.ing:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:4px}
+.ing-tick{width:13px;height:13px;border:1.5px solid var(--border);border-radius:3px;flex-shrink:0;align-self:center;position:relative;transition:all 0.15s}
+.ing.struck .ing-tick{background:var(--green);border-color:var(--green)}
+.ing.struck .ing-tick::after{content:"";position:absolute;left:4px;top:1px;width:3px;height:7px;border:solid #fff;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.ing.struck .qty,.ing.struck .iname,.ing.struck .mod{text-decoration:line-through;color:var(--muted)}
 .qty{font-weight:500;color:var(--green);min-width:56px;font-size:0.8rem}
 .iname{color:var(--ink);flex:1}
 .mod{font-size:0.7rem;color:var(--amber);font-weight:500;margin-left:auto;white-space:nowrap;padding-left:0.3rem}
+.ing-hint{font-size:0.7rem;color:var(--muted);margin-top:0.8rem;font-style:italic}
 
 .step{display:flex;gap:0.9rem;margin-bottom:1rem;align-items:flex-start}
 .step-num{background:var(--green);color:#fff;font-size:0.65rem;font-weight:500;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:4px}
 .step-text{font-size:0.88rem;color:var(--ink);line-height:1.6}
 .step-text strong{font-weight:500;color:var(--green)}
 
-/* Health notes (green, check) and watch notes (red, warning). */
+/* Health notes (green, check) and watch notes (red, warning).
+   A two-column list rather than wrapping pills: at six-plus notes the pills
+   fragmented into ragged rows and read as chrome instead of content. */
 .health-notes{background:var(--green-light);border-top:1px solid var(--border);padding:1rem 1.5rem}
-.health-note-list{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.6rem}
-.hnote{background:var(--white);border:1px solid var(--border);border-radius:7px;font-size:0.75rem;color:var(--green);padding:0.25rem 0.6rem;display:flex;align-items:center;gap:0.3rem}
-.hnote::before{content:"✓";font-weight:700}
-.wnote{background:var(--red-light);border:1px solid #F5C6C6;border-radius:7px;font-size:0.75rem;color:var(--red);padding:0.25rem 0.6rem;display:flex;align-items:center;gap:0.3rem}
-.wnote::before{content:"⚠"}
+.note-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0.15rem 1.5rem;margin-top:0.4rem}
+.hnote,.wnote{font-size:0.78rem;line-height:1.5;padding:0.25rem 0 0.25rem 1.35rem;position:relative;background:none;border:none}
+.hnote{color:var(--green)}
+.wnote{color:var(--red)}
+.hnote::before{content:"✓";position:absolute;left:0;font-weight:700}
+.wnote::before{content:"⚠";position:absolute;left:0}

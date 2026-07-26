@@ -42,19 +42,19 @@ window.RecipeBook.data.meals = [
     healthNotes: ["Brami pasta: 21g protein + 9g fiber vs regular rotini","Cauliflower: nutritionist-approved lunch vegetable","Low-sodium soy sauce reduces sodium per serving","High fiber helps manage blood sugar from carbs"],
     watchNotes: [],
     grocery: [
-      {name:"Brami Fusilli protein pasta",qty:"1 box",have:false},
-      {name:"Frozen edamame (shelled)",qty:"1 bag",have:false},
-      {name:"Cauliflower",qty:"1 head",have:false},
-      {name:"Carrots",qty:"2-3 medium",have:false},
-      {name:"Green onion",qty:"1 bunch",have:false},
-      {name:"Cilantro",qty:"1 bunch",have:false},
-      {name:"Peanuts (unsalted)",qty:"small bag",have:false},
-      {name:"Peanut butter",qty:"1 jar",have:false},
-      {name:"Limes",qty:"2",have:false},
-      {name:"Low-sodium soy sauce",qty:"1 bottle",have:false},
-      {name:"Chili crunch oil",qty:"1 jar",have:false},
-      {name:"Maple syrup",qty:"small bottle",have:false},
-      {name:"Sriracha",qty:"1 bottle",have:false}
+      {name:"Brami Fusilli protein pasta",qty:"1 box",aisle:"Pantry",have:false},
+      {name:"Frozen edamame (shelled)",qty:"1 bag",aisle:"Frozen",have:false},
+      {name:"Cauliflower",qty:"1 head",aisle:"Produce",have:false},
+      {name:"Carrots",qty:"2-3 medium",aisle:"Produce",have:false},
+      {name:"Green onion",qty:"1 bunch",aisle:"Produce",have:false},
+      {name:"Cilantro",qty:"1 bunch",aisle:"Produce",have:false},
+      {name:"Peanuts (unsalted)",qty:"small bag",aisle:"Pantry",have:false},
+      {name:"Peanut butter",qty:"1 jar",aisle:"Pantry",have:false},
+      {name:"Limes",qty:"2",aisle:"Produce",have:false},
+      {name:"Low-sodium soy sauce",qty:"1 bottle",aisle:"Pantry",have:false},
+      {name:"Chili crunch oil",qty:"1 jar",aisle:"Pantry",have:false},
+      {name:"Maple syrup",qty:"small bottle",aisle:"Pantry",have:false},
+      {name:"Sriracha",qty:"1 bottle",aisle:"Pantry",have:false}
     ]
   },
   {
@@ -86,15 +86,15 @@ window.RecipeBook.data.meals = [
     healthNotes: ["16g protein per skewer with minimal fat","Air-fried — no heavy oil needed","Salt reduced to 1/4 tsp for cardiovascular health","Low carbs and controlled sodium","Pairs well with nonstarchy vegetables for a complete meal","Oregano and garlic are anti-inflammatory"],
     watchNotes: [],
     grocery: [
-      {name:"Chicken breasts (boneless, skinless)",qty:"2 large",have:false},
-      {name:"Lemons",qty:"1",have:false},
-      {name:"Honey",qty:"small jar",have:false},
-      {name:"Olive oil",qty:"1 bottle",have:false},
-      {name:"Balsamic vinegar",qty:"1 bottle",have:false},
-      {name:"Dried oregano",qty:"small jar",have:false},
-      {name:"Garlic powder",qty:"small jar",have:false},
-      {name:"Fresh parsley",qty:"1 bunch",have:false},
-      {name:"Bamboo skewers",qty:"1 pack",have:false}
+      {name:"Chicken breasts (boneless, skinless)",qty:"2 large",aisle:"Meat",have:false},
+      {name:"Lemons",qty:"1",aisle:"Produce",have:false},
+      {name:"Honey",qty:"small jar",aisle:"Pantry",have:false},
+      {name:"Olive oil",qty:"1 bottle",aisle:"Pantry",have:false},
+      {name:"Balsamic vinegar",qty:"1 bottle",aisle:"Pantry",have:false},
+      {name:"Dried oregano",qty:"small jar",aisle:"Pantry",have:false},
+      {name:"Garlic powder",qty:"small jar",aisle:"Pantry",have:false},
+      {name:"Fresh parsley",qty:"1 bunch",aisle:"Produce",have:false},
+      {name:"Bamboo skewers",qty:"1 pack",aisle:"Household",have:false}
     ]
   },
   {
@@ -124,14 +124,14 @@ window.RecipeBook.data.meals = [
     healthNotes: ["High protein with minimal fat","Low sugar — only 1/4 tsp per serving","Low-sodium soy sauce reduces sodium significantly","Hoisin replaces oyster sauce for familiar flavor","Thai basil and garlic are anti-inflammatory","No rice — pairs well with cauliflower rice or nonstarchy vegetables"],
     watchNotes: ["Adjust chili quantity to your heat tolerance"],
     grocery: [
-      {name:"Chicken breasts (boneless, skinless)",qty:"2 large",have:false},
-      {name:"Thai chile peppers",qty:"4-6 peppers",have:false},
-      {name:"Garlic cloves",qty:"1 head",have:false},
-      {name:"Low-sodium soy sauce",qty:"1 bottle",have:false},
-      {name:"Hoisin sauce",qty:"1 jar",have:false},
-      {name:"White sugar",qty:"small bag",have:false},
-      {name:"Fresh Thai basil",qty:"1 bunch",have:false},
-      {name:"Cooking spray",qty:"1 can",have:false}
+      {name:"Chicken breasts (boneless, skinless)",qty:"2 large",aisle:"Meat",have:false},
+      {name:"Thai chile peppers",qty:"4-6 peppers",aisle:"Produce",have:false},
+      {name:"Garlic cloves",qty:"1 head",aisle:"Produce",have:false},
+      {name:"Low-sodium soy sauce",qty:"1 bottle",aisle:"Pantry",have:false},
+      {name:"Hoisin sauce",qty:"1 jar",aisle:"Pantry",have:false},
+      {name:"White sugar",qty:"small bag",aisle:"Pantry",have:false},
+      {name:"Fresh Thai basil",qty:"1 bunch",aisle:"Produce",have:false},
+      {name:"Cooking spray",qty:"1 can",aisle:"Pantry",have:false}
     ]
   }
 ];

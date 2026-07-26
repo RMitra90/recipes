@@ -2,15 +2,22 @@
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
+/* Text colours are chosen to clear WCAG AA (4.5:1) at body size against the
+   surface they sit on. --green-mid is measured against --green-light and
+   --amber against white, since that is where each is actually used. */
 :root{
-  --green:#2D5A3D;--green-light:#EAF2EC;--green-mid:#4A7C5F;
-  --amber:#B87333;--amber-light:#FDF4EB;
+  --green:#2D5A3D;--green-light:#EAF2EC;--green-mid:#447659;
+  --amber:#A96424;--amber-light:#FDF4EB;
   --ink:#1A1A1A;--muted:#6B6B6B;--border:#D8E0DA;
   --bg:#F8FAF8;--white:#FFFFFF;
   --red:#C0392B;--red-light:#FDECEC;
+  --on-green:rgba(255,255,255,0.78);
 }
 
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;min-height:100vh}
+/* Column layout so the footer sits at the bottom of short pages (the recipe
+   index is well under one screen) instead of leaving a band of background. */
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;min-height:100vh;display:flex;flex-direction:column}
+main{flex:1}
 
 /* Keyboard focus rings. Kept together so every interactive element stays covered. */
 .arrow-btn:focus-visible,.s-btn:focus-visible,.clear-btn:focus-visible,.page-tab:focus-visible{outline:2px solid var(--green);outline-offset:2px}

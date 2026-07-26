@@ -1,7 +1,9 @@
-// Renders the recipe card for one category and handles its controls.
+// Two views for the Recipes page:
+//   index  - a card grid of every recipe in a category
+//   detail - one recipe, opened from a card or a #hash link
 //
-// Listeners are delegated to the category container, which outlives every
-// re-render, so no handler is ever built into an HTML attribute string.
+// Listeners are delegated to a container that outlives every re-render, so no
+// handler is ever built into an HTML attribute string.
 
 (function (RB) {
   "use strict";
@@ -11,59 +13,61 @@
   var fmtUnit = RB.format.fmtUnit;
   var esc = RB.format.esc;
 
-  function containerId(cat) { return cat + "-recipe-container"; }
+  // Stands in for photography. Hues are drawn from the brand's green/copper
+  // family and assigned by position, so neighbouring cards always differ --
+  // hashing the id clustered several recipes into the same pink.
+  var TINTS = [145, 28, 192, 82, 12, 258];
 
-  function subcatDropdown(cat) {
-    var subcats = store.getSubcats(cat);
-    if (subcats.length === 0) return "";
-    var label = cat === "breakfast" ? "Breakfast" : "Meals";
-    var opts = '<option value="">All ' + label + "</option>";
-    subcats.forEach(function (sc) {
-      var selected = store.state.subcatFilter[cat] === sc ? " selected" : "";
-      opts += '<option value="' + esc(sc) + '"' + selected + ">" + esc(sc) + "</option>";
-    });
-    return '<div class="dd-wrap"><span class="dd-label">Category</span>'
-      + '<select class="dd-select" data-action="subcat" aria-label="Filter by category">'
-      + opts + "</select></div>";
+  function tintFor(i) { return TINTS[i % TINTS.length]; }
+
+  // --- index -----------------------------------------------------------------
+
+  function card(r, i) {
+    var n = r.nutrition;
+    return '<button class="rcard" data-open="' + esc(r.id) + '" style="--tint:' + tintFor(i) + '">'
+      + '<span class="rcard-art" aria-hidden="true"><span>' + esc(r.name.charAt(0)) + "</span></span>"
+      + '<span class="rcard-body">'
+      + '<span class="rcard-title">' + esc(r.name) + "</span>"
+      + '<span class="rcard-desc">' + esc(r.desc) + "</span>"
+      + '<span class="rcard-stats">'
+      + "<span><b>" + n.calories + "</b> cal</span>"
+      + "<span><b>" + n.protein + "g</b> protein</span>"
+      + "<span><b>" + n.fiber + "g</b> fiber</span>"
+      + "</span>"
+      + '<span class="rcard-badges">'
+      + r.badges.slice(0, 3).map(function (b) { return '<span class="badge">' + esc(b) + "</span>"; }).join("")
+      + "</span></span></button>";
   }
 
-  function recipeDropdown(recipes, idx) {
-    var opts = recipes.map(function (rec, i) {
-      return '<option value="' + i + '"' + (i === idx ? " selected" : "") + ">" + esc(rec.name) + "</option>";
-    }).join("");
-    return '<div class="dd-wrap"><span class="dd-label">Recipe</span>'
-      + '<select class="dd-select" data-action="jump" aria-label="Jump to recipe">'
-      + opts + "</select></div>";
+  function renderIndex(cat) {
+    var recipes = RB.data[cat];
+    document.getElementById(cat + "-recipe-container").innerHTML =
+      '<div class="rgrid">' + recipes.map(function (r, i) { return card(r, i); }).join("") + "</div>";
   }
+
+  // --- detail ----------------------------------------------------------------
 
   function ingredientList(r, ratio) {
     return r.ingredients.map(function (ing) {
       var scaled = ing.qty * ratio;
-      return '<li><span class="qty">' + fmtQty(scaled) + " " + esc(fmtUnit(ing.unit, scaled)) + "</span>"
+      var struck = store.isStruck(r.id, ing.name);
+      return '<li class="ing' + (struck ? " struck" : "") + '"'
+        + ' data-struck="' + esc(store.struckKey(r.id, ing.name)) + '"'
+        + ' role="checkbox" aria-checked="' + struck + '" tabindex="0">'
+        + '<span class="ing-tick" aria-hidden="true"></span>'
+        + '<span class="qty">' + fmtQty(scaled) + " " + esc(fmtUnit(ing.unit, scaled)) + "</span>"
         + '<span class="iname">' + esc(ing.name) + "</span>"
         + (ing.mod ? '<span class="mod">' + esc(ing.mod) + "</span>" : "")
         + "</li>";
     }).join("");
   }
 
-  function stepList(r) {
-    // Steps are authored with inline <strong> markup, so they are not escaped.
-    return r.steps.map(function (s, i) {
-      return '<div class="step"><span class="step-num">' + (i + 1) + "</span>"
-        + '<span class="step-text">' + s + "</span></div>";
-    }).join("");
-  }
-
   function nutritionStrip(n) {
     var cells = [
-      [n.calories, "", "Calories"],
-      [n.protein, "g", "Protein"],
-      [n.carbs, "g", "Carbs"],
-      [n.fiber, "g", "Fiber"],
-      [n.addedSugar, "g", "Added sugar"],
-      [n.sodium, "mg", "Sodium"]
+      [n.calories, "", "Calories"], [n.protein, "g", "Protein"], [n.carbs, "g", "Carbs"],
+      [n.fiber, "g", "Fiber"], [n.addedSugar, "g", "Added sugar"], [n.sodium, "mg", "Sodium"]
     ];
-    // Values are per serving and deliberately do not scale with the stepper.
+    // Per serving by definition, so these never scale with the stepper.
     return '<div class="nutrition-label">Per serving</div><div class="nutrition-strip">'
       + cells.map(function (c) {
           return '<div class="nutrition-cell"><span class="val">' + c[0] + c[1] + "</span>"
@@ -72,32 +76,23 @@
       + "</div>";
   }
 
-  function render(cat) {
-    var recipes = store.getVisibleRecipes(cat);
-    if (recipes.length === 0) {
-      store.setSubcatFilter(cat, null);
-      recipes = store.getVisibleRecipes(cat);
-    }
-    var idx = store.currentIndex(cat, recipes.length);
-    var r = recipes[idx];
+  function renderDetail(cat, id) {
+    var r = store.findRecipe(id);
+    if (!r) { renderIndex(cat); return; }
     var servings = store.state.servings[r.id];
     var ratio = servings / r.baseServings;
+    var planned = store.isSelected(r.id);
 
-    var html = '<div class="dd-row">'
-      + subcatDropdown(cat)
-      + recipeDropdown(recipes, idx)
-      + '<div class="dd-wrap" style="align-self:flex-end"><div class="recipe-nav-arrows">'
-      + '<button class="arrow-btn" data-action="prev" aria-label="Previous recipe"'
-      + (idx === 0 ? " disabled" : "") + ">&#8592;</button>"
-      + '<button class="arrow-btn" data-action="next" aria-label="Next recipe"'
-      + (idx === recipes.length - 1 ? " disabled" : "") + ">&#8594;</button>"
+    var html = '<div class="detail-bar">'
+      + '<button class="back-btn" data-back="1">&#8592; All ' + (cat === "breakfast" ? "breakfast" : "meals") + "</button>"
+      + '<div class="detail-bar-right">'
+      + '<button class="plan-btn' + (planned ? " on" : "") + '" data-plan="' + esc(r.id) + '"'
+      + ' aria-pressed="' + planned + '">' + (planned ? "&#10003; In this week" : "+ Add to week") + "</button>"
+      + '<button class="print-btn" data-print="1">Print</button>'
       + "</div></div>"
-      + '<span class="recipe-counter" style="align-self:flex-end;padding-bottom:0.5rem">'
-      + (idx + 1) + " of " + recipes.length + "</span>"
-      + "</div>"
 
       + '<div class="recipe-card"><div class="recipe-header"><div class="recipe-header-top">'
-      + '<div><div class="recipe-title">' + esc(r.name) + "</div>"
+      + '<div><h2 class="recipe-title">' + esc(r.name) + "</h2>"
       + '<div class="recipe-desc">' + esc(r.desc) + "</div></div>"
       + '<div class="recipe-badges">'
       + r.badges.map(function (b) { return '<span class="badge">' + esc(b) + "</span>"; }).join("")
@@ -112,57 +107,80 @@
       + nutritionStrip(r.nutrition)
 
       + '<div class="recipe-body">'
-      + '<div class="ingredients-col"><div class="col-label">Ingredients for ' + servings + " servings</div>"
-      + '<ul class="ingredient-list">' + ingredientList(r, ratio) + "</ul></div>"
-      + '<div class="steps-col"><div class="col-label">Instructions</div>' + stepList(r) + "</div>"
-      + "</div>"
+      + '<div class="ingredients-col">'
+      + '<div class="col-head"><span class="col-label">Ingredients for ' + servings + " servings</span>"
+      + '<button class="reset-link" data-reset="' + esc(r.id) + '">Reset</button></div>'
+      + '<ul class="ingredient-list">' + ingredientList(r, ratio) + "</ul>"
+      + '<p class="ing-hint">Tap an ingredient to cross it off while you cook.</p></div>'
+      + '<div class="steps-col"><div class="col-label">Instructions</div>'
+      // Steps carry authored inline <strong>, so they are not escaped.
+      + r.steps.map(function (s, i) {
+          return '<div class="step"><span class="step-num">' + (i + 1) + "</span>"
+            + '<span class="step-text">' + s + "</span></div>";
+        }).join("")
+      + "</div></div>"
 
       + '<div class="health-notes"><div class="col-label" style="margin-bottom:0.5rem">Why this works for your goals</div>'
-      + '<div class="health-note-list">'
-      + r.healthNotes.map(function (t) { return '<span class="hnote">' + esc(t) + "</span>"; }).join("")
-      + r.watchNotes.map(function (t) { return '<span class="wnote">' + esc(t) + "</span>"; }).join("")
-      + "</div></div></div>";
+      + '<ul class="note-list">'
+      + r.healthNotes.map(function (t) { return '<li class="hnote">' + esc(t) + "</li>"; }).join("")
+      + r.watchNotes.map(function (t) { return '<li class="wnote">' + esc(t) + "</li>"; }).join("")
+      + "</ul></div></div>";
 
-    document.getElementById(containerId(cat)).innerHTML = html;
+    document.getElementById(cat + "-recipe-container").innerHTML = html;
   }
+
+  function render(cat) {
+    var open = store.state.openRecipe;
+    if (open && store.categoryOf(open) === cat) renderDetail(cat, open);
+    else renderIndex(cat);
+  }
+
+  // --- wiring ----------------------------------------------------------------
 
   function init(cat) {
     var wrap = document.getElementById("cat-" + cat);
-    wrap.innerHTML = '<div id="' + containerId(cat) + '"></div>';
-    var container = document.getElementById(containerId(cat));
+    wrap.innerHTML = '<div id="' + cat + '-recipe-container"></div>';
+    var container = document.getElementById(cat + "-recipe-container");
 
     container.addEventListener("click", function (e) {
-      var el = e.target.closest("[data-action]");
-      if (!el || el.disabled) return;
-      var action = el.getAttribute("data-action");
-      var recipes = store.getVisibleRecipes(cat);
-      var idx = store.state.indices[cat];
+      var open = e.target.closest("[data-open]");
+      if (open) { RB.router.go("recipe/" + open.getAttribute("data-open")); return; }
 
-      if (action === "prev" && idx > 0) {
-        store.setIndex(cat, idx - 1);
-      } else if (action === "next" && idx < recipes.length - 1) {
-        store.setIndex(cat, idx + 1);
-      } else if (action === "serv") {
-        var r = recipes[idx];
-        if (r) store.changeServings(r.id, parseInt(el.getAttribute("data-delta"), 10));
-      } else {
+      if (e.target.closest("[data-back]")) { RB.router.go(cat); return; }
+      if (e.target.closest("[data-print]")) { window.print(); return; }
+
+      var plan = e.target.closest("[data-plan]");
+      if (plan) {
+        store.toggleSelected(plan.getAttribute("data-plan"));
+        render(cat);
+        RB.shoppingView.render();
         return;
       }
-      render(cat);
+
+      var reset = e.target.closest("[data-reset]");
+      if (reset) { store.clearStruck(reset.getAttribute("data-reset")); render(cat); return; }
+
+      var ing = e.target.closest("[data-struck]");
+      if (ing) { store.toggleStruck(ing.getAttribute("data-struck")); render(cat); return; }
+
+      var act = e.target.closest("[data-action]");
+      if (act && !act.disabled && act.getAttribute("data-action") === "serv") {
+        var r = store.findRecipe(store.state.openRecipe);
+        if (r) { store.changeServings(r.id, parseInt(act.getAttribute("data-delta"), 10)); render(cat); }
+      }
     });
 
-    container.addEventListener("change", function (e) {
-      var el = e.target.closest("[data-action]");
-      if (!el) return;
-      var action = el.getAttribute("data-action");
-      if (action === "subcat") store.setSubcatFilter(cat, el.value || null);
-      else if (action === "jump") store.setIndex(cat, parseInt(el.value, 10));
-      else return;
+    container.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var ing = e.target.closest("[data-struck]");
+      if (!ing) return;
+      e.preventDefault();
+      store.toggleStruck(ing.getAttribute("data-struck"));
       render(cat);
     });
 
     render(cat);
   }
 
-  RB.recipeView = { init: init, render: render };
+  RB.recipeView = {init: init, render: render};
 })(window.RecipeBook = window.RecipeBook || {});
