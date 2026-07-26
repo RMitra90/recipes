@@ -1,0 +1,33 @@
+/* Shopping list page. Rendered by js/shopping-view.js. */
+
+.shop-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.shop-header h2{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400}
+.clear-btn{background:none;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--muted);padding:0.4rem 0.85rem;cursor:pointer;transition:all 0.15s}
+.clear-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* Overall progress across every item in every recipe. */
+.progress-label{font-size:0.78rem;color:var(--muted);margin-bottom:0.5rem}
+.progress-bar{height:3px;background:var(--border);border-radius:999px;margin-bottom:1.5rem;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:999px;transition:width 0.3s}
+
+/* One section per recipe. */
+.shop-section{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.25rem}
+.shop-section-header{background:var(--green-light);padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.shop-section-title{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--green)}
+.shop-section-count{font-size:0.72rem;color:var(--green-mid)}
+
+/* Rows act as checkboxes (role="checkbox", keyboard operable). */
+.shop-item{display:flex;align-items:center;gap:0.85rem;padding:0.7rem 1.25rem;border-bottom:1px solid var(--green-light);cursor:pointer;transition:background 0.1s;user-select:none}
+.shop-item:last-child{border-bottom:none}
+.shop-item:hover{background:var(--bg)}
+.shop-item.checked .shop-item-name{text-decoration:line-through;color:var(--muted)}
+.shop-item-name{flex:1;font-size:0.9rem;color:var(--ink)}
+.shop-item-qty{font-size:0.78rem;color:var(--muted);white-space:nowrap}
+
+.shop-checkbox{width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.shop-item.checked .shop-checkbox{background:var(--green);border-color:var(--green)}
+.checkmark{display:none;font-size:11px;color:#fff;font-weight:700}
+.shop-item.checked .checkmark{display:block}
+
+/* Shown instead of a checkbox for staples marked have:true in the data. */
+.have-tag{font-size:0.7rem;color:var(--green-mid);font-weight:500;margin-left:0.4rem}

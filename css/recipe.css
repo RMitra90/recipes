@@ -1,0 +1,66 @@
+/* The recipe card and its controls. Rendered by js/recipe-view.js. */
+
+/* Selector row above the card: category filter, recipe picker, prev/next, counter. */
+.dd-row{display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.dd-wrap{position:relative}
+.dd-label{font-size:0.65rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;display:block}
+.dd-select{appearance:none;-webkit-appearance:none;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:0.5rem 2rem 0.5rem 0.85rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;color:var(--ink);cursor:pointer;min-width:200px;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234A7C5F' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.85rem center;transition:border-color 0.15s}
+.dd-select:hover{border-color:var(--green)}
+.dd-select:focus{outline:none;border-color:var(--green)}
+.recipe-counter{font-size:0.8rem;color:var(--muted)}
+.recipe-nav-arrows{display:flex;gap:0.5rem}
+.arrow-btn{background:var(--white);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--muted);transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.arrow-btn:hover:not([disabled]){border-color:var(--green);color:var(--green)}
+.arrow-btn[disabled]{opacity:0.35;cursor:default}
+
+/* Card shell and header. */
+.recipe-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.recipe-header{background:var(--green-light);padding:1.5rem 1.75rem;border-bottom:1px solid var(--border)}
+.recipe-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.recipe-title{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400;color:var(--green)}
+.recipe-desc{font-size:0.85rem;color:var(--green-mid);margin-top:0.2rem;max-width:380px}
+.recipe-badges{display:flex;gap:0.4rem;flex-wrap:wrap}
+.badge{background:var(--white);border:1px solid var(--border);border-radius:999px;font-size:0.72rem;font-weight:500;color:var(--green);padding:0.18rem 0.6rem;white-space:nowrap}
+
+/* Servings stepper. Scales the ingredient column only, never the nutrition strip. */
+.serving-control{display:flex;align-items:center;gap:0.75rem;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:0.6rem 1rem;width:fit-content}
+.serving-label{font-size:0.78rem;color:var(--muted);font-weight:500}
+.serving-btns{display:flex;align-items:center;gap:0.5rem}
+.s-btn{background:none;border:1px solid var(--border);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:var(--ink);line-height:1;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.s-btn:hover{border-color:var(--green);color:var(--green)}
+.serving-num{font-size:1rem;font-weight:500;color:var(--ink);min-width:28px;text-align:center}
+
+/* Nutrition strip. Always per serving, so these values never scale. */
+.nutrition-label{font-size:0.65rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;padding:0.7rem 1rem 0.15rem;background:var(--white)}
+.nutrition-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));border-bottom:1px solid var(--border)}
+.nutrition-cell{padding:0.85rem 1rem;text-align:center;border-right:1px solid var(--border)}
+.nutrition-cell:last-child{border-right:none}
+.nutrition-cell .val{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--ink);display:block}
+.nutrition-cell .lbl{font-size:0.65rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:0.1rem}
+
+/* Two-column body: ingredients left, instructions right. Stacks under 600px. */
+.recipe-body{display:grid;grid-template-columns:1fr 1.35fr}
+@media(max-width:600px){.recipe-body{grid-template-columns:1fr}}
+.ingredients-col{padding:1.25rem 1.5rem;border-right:1px solid var(--border)}
+.steps-col{padding:1.25rem 1.5rem}
+.col-label{font-size:0.65rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.9rem}
+
+.ingredient-list{list-style:none}
+.ingredient-list li{display:flex;gap:0.5rem;padding:0.38rem 0;border-bottom:1px solid var(--green-light);font-size:0.88rem;align-items:baseline}
+.ingredient-list li:last-child{border-bottom:none}
+.qty{font-weight:500;color:var(--green);min-width:56px;font-size:0.8rem}
+.iname{color:var(--ink);flex:1}
+.mod{font-size:0.7rem;color:var(--amber);font-weight:500;margin-left:auto;white-space:nowrap;padding-left:0.3rem}
+
+.step{display:flex;gap:0.9rem;margin-bottom:1rem;align-items:flex-start}
+.step-num{background:var(--green);color:#fff;font-size:0.65rem;font-weight:500;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:4px}
+.step-text{font-size:0.88rem;color:var(--ink);line-height:1.6}
+.step-text strong{font-weight:500;color:var(--green)}
+
+/* Health notes (green, check) and watch notes (red, warning). */
+.health-notes{background:var(--green-light);border-top:1px solid var(--border);padding:1rem 1.5rem}
+.health-note-list{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.6rem}
+.hnote{background:var(--white);border:1px solid var(--border);border-radius:7px;font-size:0.75rem;color:var(--green);padding:0.25rem 0.6rem;display:flex;align-items:center;gap:0.3rem}
+.hnote::before{content:"✓";font-weight:700}
+.wnote{background:var(--red-light);border:1px solid #F5C6C6;border-radius:7px;font-size:0.75rem;color:var(--red);padding:0.25rem 0.6rem;display:flex;align-items:center;gap:0.3rem}
+.wnote::before{content:"⚠"}

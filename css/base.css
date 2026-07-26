@@ -1,0 +1,18 @@
+/* Reset, design tokens, page defaults, and shared focus styles. */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --green:#2D5A3D;--green-light:#EAF2EC;--green-mid:#4A7C5F;
+  --amber:#B87333;--amber-light:#FDF4EB;
+  --ink:#1A1A1A;--muted:#6B6B6B;--border:#D8E0DA;
+  --bg:#F8FAF8;--white:#FFFFFF;
+  --red:#C0392B;--red-light:#FDECEC;
+}
+
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;min-height:100vh}
+
+/* Keyboard focus rings. Kept together so every interactive element stays covered. */
+.arrow-btn:focus-visible,.s-btn:focus-visible,.clear-btn:focus-visible,.page-tab:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.nav-links button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.shop-item[data-key]:focus-visible{outline:2px solid var(--green);outline-offset:-2px;background:var(--bg)}
