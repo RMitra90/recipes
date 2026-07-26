@@ -2,7 +2,7 @@
    Loaded with media="print", so it never affects the screen view. */
 
 nav, .hero, .page-tabs, footer,
-.detail-bar, .serving-control, .planner, .progress-bar, .progress-label,
+.detail-bar, .serving-control, .planner, .progress-bar, .progress-label, .dd-row,
 .ing-hint, .reset-link, .clear-btn, .rgrid {
   display: none !important;
 }

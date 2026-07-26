@@ -22,6 +22,7 @@
   var state = {
     currentCat: "breakfast",
     openRecipe: null,          // recipe id when a detail view is showing, else null
+    subcatFilter: {breakfast: null, meals: null},
     servings: {},
     checked: load(KEYS.checked),
     struck: load(KEYS.struck),
@@ -48,6 +49,28 @@
 
   function categoryOf(id) {
     return data.breakfast.some(function (r) { return r.id === id; }) ? "breakfast" : "meals";
+  }
+
+  // --- subcategory filter ----------------------------------------------------
+
+  function getSubcats(cat) {
+    var subs = [];
+    data[cat].forEach(function (r) {
+      if (r.subcat && subs.indexOf(r.subcat) === -1) subs.push(r.subcat);
+    });
+    return subs;
+  }
+
+  // Drives both the card grid and the recipe dropdown, so the two never
+  // disagree about which recipes are in play.
+  function getVisibleRecipes(cat) {
+    var filter = state.subcatFilter[cat];
+    if (!filter) return data[cat];
+    return data[cat].filter(function (r) { return r.subcat === filter; });
+  }
+
+  function setSubcatFilter(cat, subcat) {
+    state.subcatFilter[cat] = subcat || null;
   }
 
   // --- weekly plan -----------------------------------------------------------
@@ -157,6 +180,9 @@
     allRecipes: allRecipes,
     findRecipe: findRecipe,
     categoryOf: categoryOf,
+    getSubcats: getSubcats,
+    getVisibleRecipes: getVisibleRecipes,
+    setSubcatFilter: setSubcatFilter,
     isSelected: isSelected,
     toggleSelected: toggleSelected,
     setAllSelected: setAllSelected,

@@ -1,5 +1,17 @@
 /* The recipe index grid and the recipe card. Rendered by js/recipe-view.js. */
 
+/* --- recipe picker ------------------------------------------------------- */
+
+/* Above both the grid and the detail view: the quick way to reach a recipe
+   without scrolling, which matters most on a phone. */
+.dd-row{display:flex;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:flex-end}
+.dd-wrap{position:relative;flex:1 1 190px;min-width:0}
+.dd-grow{flex:2 1 240px}
+.dd-label{font-size:0.65rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem;display:block}
+.dd-select{appearance:none;-webkit-appearance:none;width:100%;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:0.55rem 2rem 0.55rem 0.85rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;color:var(--ink);cursor:pointer;text-overflow:ellipsis;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23447659' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.85rem center;transition:border-color 0.15s}
+.dd-select:hover{border-color:var(--green)}
+.dd-select:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-color:var(--green)}
+
 /* --- index grid ---------------------------------------------------------- */
 
 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}

@@ -20,6 +20,41 @@
 
   function tintFor(i) { return TINTS[i % TINTS.length]; }
 
+  // --- picker ----------------------------------------------------------------
+
+  // Sits above both views. Scrolling a grid to reach a recipe is slow on a
+  // phone, so the dropdown stays the fast path; the cards are for browsing.
+  function picker(cat, currentId) {
+    var subcats = store.getSubcats(cat);
+    var recipes = store.getVisibleRecipes(cat);
+    var html = '<div class="dd-row">';
+
+    if (subcats.length > 0) {
+      var label = cat === "breakfast" ? "Breakfast" : "Meals";
+      var opts = '<option value="">All ' + esc(label) + "</option>";
+      subcats.forEach(function (sc) {
+        var sel = store.state.subcatFilter[cat] === sc ? " selected" : "";
+        opts += '<option value="' + esc(sc) + '"' + sel + ">" + esc(sc) + "</option>";
+      });
+      html += '<div class="dd-wrap"><span class="dd-label">Category</span>'
+        + '<select class="dd-select" data-action="subcat" aria-label="Filter by category">'
+        + opts + "</select></div>";
+    }
+
+    // On the index nothing is open yet, so the first option is a prompt.
+    var recipeOpts = currentId ? "" : '<option value="">Jump to a recipe&hellip;</option>';
+    recipeOpts += recipes.map(function (r) {
+      return '<option value="' + esc(r.id) + '"' + (r.id === currentId ? " selected" : "") + ">"
+        + esc(r.name) + "</option>";
+    }).join("");
+
+    html += '<div class="dd-wrap dd-grow"><span class="dd-label">Recipe</span>'
+      + '<select class="dd-select" data-action="jump" aria-label="Choose a recipe">'
+      + recipeOpts + "</select></div>";
+
+    return html + "</div>";
+  }
+
   // --- index -----------------------------------------------------------------
 
   function card(r, i) {
@@ -40,9 +75,11 @@
   }
 
   function renderIndex(cat) {
-    var recipes = RB.data[cat];
-    document.getElementById(cat + "-recipe-container").innerHTML =
-      '<div class="rgrid">' + recipes.map(function (r, i) { return card(r, i); }).join("") + "</div>";
+    var recipes = store.getVisibleRecipes(cat);
+    var grid = recipes.length === 0
+      ? '<p class="empty-note">No recipes in that category yet.</p>'
+      : '<div class="rgrid">' + recipes.map(function (r, i) { return card(r, i); }).join("") + "</div>";
+    document.getElementById(cat + "-recipe-container").innerHTML = picker(cat, null) + grid;
   }
 
   // --- detail ----------------------------------------------------------------
@@ -83,7 +120,8 @@
     var ratio = servings / r.baseServings;
     var planned = store.isSelected(r.id);
 
-    var html = '<div class="detail-bar">'
+    var html = picker(cat, r.id)
+      + '<div class="detail-bar">'
       + '<button class="back-btn" data-back="1">&#8592; All ' + (cat === "breakfast" ? "breakfast" : "meals") + "</button>"
       + '<div class="detail-bar-right">'
       + '<button class="plan-btn' + (planned ? " on" : "") + '" data-plan="' + esc(r.id) + '"'
@@ -167,6 +205,22 @@
       if (act && !act.disabled && act.getAttribute("data-action") === "serv") {
         var r = store.findRecipe(store.state.openRecipe);
         if (r) { store.changeServings(r.id, parseInt(act.getAttribute("data-delta"), 10)); render(cat); }
+      }
+    });
+
+    container.addEventListener("change", function (e) {
+      var el = e.target.closest("[data-action]");
+      if (!el) return;
+      var action = el.getAttribute("data-action");
+
+      if (action === "jump") {
+        if (el.value) RB.router.go("recipe/" + el.value);
+      } else if (action === "subcat") {
+        store.setSubcatFilter(cat, el.value);
+        // Filtering is a browsing action, so it always lands on the grid --
+        // staying on a detail view that the filter may exclude would be odd.
+        if (store.state.openRecipe) RB.router.go(cat);
+        else render(cat);
       }
     });
 
